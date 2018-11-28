@@ -10,7 +10,7 @@
     "version": "2.2.0",
     "config": {
       "replace": {
-        "source": "https://github.com/mediadepot/ignition/ignition.json"
+        "source": "https://mediadepot.github.io/ignition/ignition.json"
       }
     }
   }
