@@ -1,0 +1,122 @@
+#cloud-config
+#
+####################
+
+##################################################
+#
+# Install packages
+#
+##################################################
+packages:
+ - htop
+ - tree
+
+##################################################
+#
+# Reboot the machine when done.
+# This is done to make sure the mount script is
+# working
+#
+##################################################
+power_state:
+ delay: "now"
+ mode: reboot
+ message: First Reboot!
+ timeout: 30
+
+##################################################
+#
+# Create groups
+#
+##################################################
+groups:
+ - patman
+
+
+##################################################
+#
+# Create users.
+#    * set their prefered shell
+#    * Set their group membership
+#    * give them admin permissions
+#    * Set their password (copied from ecnrypted version @ /etc/shadow)
+#    * Input Public SSH keys to allow access
+#
+##################################################
+users:
+ - default
+ - name: patman
+   shell: /bin/bash
+   sudo: [ "ALL=(ALL) ALL" ]
+   primary-group: patman
+   passwd: $6$C5Hpbc-NOTREALKEY
+   ssh-authorized-keys:
+     - ssh-rsa AAAAB3NzaC-NOTREALKEY
+
+
+##################################################
+#
+# runcmd:
+#    List of commands to execute
+#    If a command has a verbose setting, it's a
+#    good idea to use it.  Just in case you
+#    Need to debug later.
+#    Output is logged to
+#      /var/log/cloud-init-output.log
+#
+##################################################
+runcmd:
+
+##################################################
+#
+# passwd <username> -u
+#   When a user is created and their password
+# set... their password is locked in /etc/shadow
+# (it has a '!' in front of their encrypted
+# password, hard to see and a pain)
+# This command unlocks it
+#
+##################################################
+ - 'passwd patman -u'
+
+
+##################################################
+#
+# This fixes the hostname in /etc/hosts
+# which removes annoying messages when you
+# are trying to run commands using sudo
+#
+##################################################
+ - 'echo 127.0.0.1 `hostname` >> /etc/hosts'
+
+##################################################
+#
+# write_files:
+#    Files to write out.
+#
+##################################################
+write_files:
+
+
+##################################################
+#
+# Set static IP address (would rather do this in meta-data but it is no
+# working at the moment)
+#   @ /etc/network/interfaces
+#
+##################################################
+ - path: /etc/network/interfaces
+   permissions: '0644'
+   owner: root:root
+   content: |
+      auto lo
+      iface lo inet loopback
+      #
+      #
+      auto eth0
+      iface eth0 inet static
+            address 192.168.0.75
+            netmask 255.255.255.0
+            broadcast 192.168.1.255
+            gateway 192.168.0.1
+            dns-nameservers 8.8.8.8
