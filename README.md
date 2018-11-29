@@ -38,6 +38,8 @@
 - https://coreos.com/ignition/docs/latest/examples.html
 - https://coreos.com/validate/
 - https://github.com/coreos/ignition/blob/master/doc/configuration-v2_2.md
+- `journalctl --identifier=ignition`
+
 
 # SystemD
 - https://container-solutions.com/running-docker-containers-with-systemd/

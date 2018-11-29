@@ -121,11 +121,6 @@
         "name": "mergerfs.service",
         "enabled": true,
         "contents": "[Unit]\nDescription=MergerFS Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull mediadepot/mergerfs\nExecStart=/usr/bin/docker run --rm --name %n --privileged --cap-add SYS_ADMIN --cap-add MKNOD --device /dev/fuse -v /mnt:/mnt -v /media:/media:shared mediadepot/mergerfs\nExecStop=/usr/bin/docker stop -t 40 %n\n\n\n[Install]\nWantedBy=multi-user.target"
-      },
-      {
-        "name": "depotfs.service",
-        "enabled": true,
-        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=mergerfs.service\nRequires=mergerfs.service\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }
