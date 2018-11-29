@@ -35,12 +35,20 @@
 - https://coreos.com/os/docs/latest/installing-to-disk.html
 - https://gist.github.com/phumpal/d0007d314a12ee9c015e
 - https://coreos.com/ignition/docs/latest/
-- https://developer.atlassian.com/blog/2015/03/docker-systemd-socket-activation/
 - https://coreos.com/ignition/docs/latest/examples.html
 - https://coreos.com/validate/
-- https://karlstoney.com/2017/03/03/docker-containers-as-systemd-services/
-- https://container-solutions.com/running-docker-containers-with-systemd/
 - https://github.com/coreos/ignition/blob/master/doc/configuration-v2_2.md
+
+# SystemD
+- https://container-solutions.com/running-docker-containers-with-systemd/
+- https://developer.atlassian.com/blog/2015/03/docker-systemd-socket-activation/
+- https://karlstoney.com/2017/03/03/docker-containers-as-systemd-services/
+- https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/managing_containers/using_systemd_with_containers
+- https://forums.docker.com/t/running-docker-containers-with-systemd-question/52681
+- https://forums.docker.com/t/any-simple-and-safe-way-to-start-services-on-centos7-systemd/5695/11
+- https://fardog.io/blog/2017/12/30/running-docker-containers-with-systemd/
+- https://blog.marcnuri.com/docker-container-as-linux-system-service/
+-
 
 ## MergerFS
 - https://github.com/mitre/fusera/wiki/FUSE-and-Docker
