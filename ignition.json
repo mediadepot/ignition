@@ -37,10 +37,14 @@
   "storage": {
     "directories": [
       {
+        "filesystem": "root",
+        "mode": 493,
         "path": "/opt/mediadepot/rancher"
       },
 
       {
+        "filesystem": "root",
+        "mode": 493,
         "path": "/opt/mediadepot/apps",
         "user": {
           "id": 15000
@@ -51,6 +55,8 @@
       },
 
       {
+        "filesystem": "root",
+        "mode": 493,
         "path": "/media/storage",
         "user": {
           "id": 15000
@@ -60,6 +66,8 @@
         }
       },
       {
+        "filesystem": "root",
+        "mode": 493,
         "path": "/mnt/drive1",
         "user": {
           "id": 15000
