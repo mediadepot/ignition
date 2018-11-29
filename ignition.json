@@ -132,7 +132,18 @@
       {
         "name": "media-storage.mount",
         "enabled": true,
-        "contents": "[Unit]\nDescription = Mount mergerfs volume\nRequires = usr-sbin.mount\nAfter = usr-sbin.mount\n\n[Mount]\nWhat = /mnt/drive*\nWhere = /media/storage\nType = mergerfs\nOptions = direct_io,defaults,allow_other,minfreespace=50G,use_ino,fsname=mergerf\n[Install]\nWantedBy = multi-user.target"
+        "contents": "[Unit]\nDescription = Mount mergerfs volume\nRequires = usr-sbin.mount\nAfter = usr-sbin.mount\n\n[Mount]\nWhat = /mnt/drive*\nWhere = /media/storage\nType = mergerfs\nOptions = direct_io,defaults,allow_other,minfreespace=50G,use_ino,fsname=mergerfs\n[Install]\nWantedBy = multi-user.target"
+      },
+      {
+        "name": "depot-filesystem.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=media-storage.mount\nRequires=media-storage.mount\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
+      },
+
+      {
+        "name": "rancher.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Rancher Admin Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull rancher/rancher:stable\nExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -v /opt/mediadepot/rancher:/var/lib/rancher rancher/rancher:stable\nExecStop=/usr/bin/docker stop -t 15 %n\n\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }
