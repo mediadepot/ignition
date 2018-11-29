@@ -38,6 +38,12 @@
     "files": [
       {
         "filesystem": "root",
+        "path": "/opt/sbin/mergerfs",
+        "mode": 493,
+        "contents": { "source": "https://mediadepot.github.io/ignition/files/sbin/mergerfs" }
+      },
+      {
+        "filesystem": "root",
         "path": "/opt/mediadepot/filesystem.sh",
         "mode": 493,
         "contents": { "source": "https://mediadepot.github.io/ignition/files/filesystem.sh" }
@@ -46,15 +52,20 @@
     "links": [
       {
         "filesystem": "root",
-        "path": "/etc/systemd/system/media-storage.mount.wants/depotfs.service",
-        "target": "/etc/systemd/system/depotfs.service"
+        "path": "/opt/sbin/mount.mergerfs",
+        "target": "/opt/sbin/mergerfs"
       }
     ],
     "directories": [
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/etc/systemd/system/media-storage.mount.wants/"
+        "path": "/opt/sbin/"
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/opt/sbin.workdir/"
       },
 
       {
@@ -113,14 +124,16 @@
   "systemd": {
     "units": [
       {
+        "name":"overlay-sbin.mount",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Overlay mount /usr/sbin mount\nBefore=local-fs.target\nConditionPathExists=/opt/sbin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/sbin\nOptions=lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/sbin.workdir\n\n[Install]\nWantedBy=local-fs.target"
+      },
+
+
+      {
         "name": "rancher.service",
         "enabled": true,
         "contents": "[Unit]\nDescription=Rancher Admin Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull rancher/rancher:stable\nExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -v /opt/mediadepot/rancher:/var/lib/rancher rancher/rancher:stable\nExecStop=/usr/bin/docker stop -t 15 %n\n\n\n[Install]\nWantedBy=multi-user.target"
-      },
-      {
-        "name": "mergerfs.service",
-        "enabled": true,
-        "contents": "[Unit]\nDescription=MergerFS Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull mediadepot/mergerfs\nExecStart=/usr/bin/docker run --rm --name %n --privileged --cap-add SYS_ADMIN --cap-add MKNOD --device /dev/fuse -v /mnt:/mnt -v /media:/media:shared mediadepot/mergerfs\nExecStop=/usr/bin/docker stop -t 40 %n\n\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }

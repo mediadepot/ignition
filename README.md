@@ -58,6 +58,21 @@
 - https://github.com/mitre/fusera/wiki/FUSE-and-Docker
 - https://serverfault.com/questions/632075/convert-an-fstab-entry-to-a-systemd-mount-unit-on-coreos
 - https://hynek.me/articles/docker-signals/
+- https://blog.packagecloud.io/eng/2015/10/13/inspect-extract-contents-rpm-packages/
+- https://github.com/coreos/bugs/issues/641
+- https://github.com/coreos/bugs/issues/358
+- http://webcache.googleusercontent.com/search?q=cache:NVzT88tLQD0J:www.ulabs.uservers.net/howtos/glusterfs-coreos.php+&cd=6&hl=en&ct=clnk&gl=us
+- https://www.mikenowak.org/working-around-read-file-systems-coreos-overlay/
+
+
+```
+docker run -it -v `pwd`:/mounted centos /bin/bash
+curl -O -L https://github.com/trapexit/mergerfs/releases/download/2.25.1/mergerfs-2.25.1-1.el7.x86_64.rpm
+rpm2cpio mergerfs-2.25.1-1.el7.x86_64.rpm | cpio -idmv
+cp -r bin/ /mounted/files/
+```
+
+- `mount -o "lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/sbin.workdir" -t overlay overlay /usr/sbin`
 
 ## Samba
 
