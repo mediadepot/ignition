@@ -40,22 +40,6 @@
     ]
   },
   "storage": {
-    "filesystems": [
-      {
-        "mount": {
-          "device": "/dev/sdb",
-          "format": "ext4"
-        },
-        "path": "/mnt/drive1"
-      },
-      {
-        "mount": {
-          "device": "/dev/sdc",
-          "format": "ext4"
-        },
-        "path": "/mnt/drive2"
-      }
-    ],
     "directories": [
       {
         "filesystem": "root",
@@ -81,5 +65,18 @@
       }
     ]
   },
-  "systemd": {}
+  "systemd": {
+    "units": [
+      {
+        "name": "mnt-drive1.mount",
+        "enable": true,
+        "contents": "[Mount]\nWhat=/dev/sdb\nWhere=/mnt/drive1\nType=ext4\n\n[Install]\nWantedBy=local-fs.target"
+      },
+      {
+        "name": "mnt-drive2.mount",
+        "enable": true,
+        "contents": "[Mount]\nWhat=/dev/sdb\nWhere=/mnt/drive1\nType=ext4\n\n[Install]\nWantedBy=local-fs.target"
+      }
+    ]
+  }
 }
