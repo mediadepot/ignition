@@ -43,7 +43,20 @@
         "contents": { "source": "https://mediadepot.github.io/ignition/files/filesystem.sh" }
       }
     ],
+    "links": [
+      {
+        "filesystem": "root",
+        "path": "/etc/systemd/system/media-storage.mount.wants/depotfs.service",
+        "target": "/etc/systemd/system/depotfs.service"
+      }
+    ],
     "directories": [
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/etc/systemd/system/media-storage.mount.wants"
+      },
+
       {
         "filesystem": "root",
         "mode": 493,
@@ -110,9 +123,9 @@
         "contents": "[Unit]\nDescription=MergerFS Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull mediadepot/mergerfs\nExecStart=/usr/bin/docker run --rm --name %n --privileged --cap-add SYS_ADMIN --cap-add MKNOD --device /dev/fuse -v /mnt:/mnt -v /media:/media:shared mediadepot/mergerfs\nExecStop=/usr/bin/docker stop -t 40 %n\n\n\n[Install]\nWantedBy=multi-user.target"
       },
       {
-        "name": "filesystem.service",
+        "name": "depotfs.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=MergerFS Filesystem\nAfter=mergerfs.service\nRequires=mergerfs.service\nRequiresMountsFor=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
+        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=mergerfs.service\nRequires=mergerfs.service\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }
