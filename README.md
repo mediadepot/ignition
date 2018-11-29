@@ -52,7 +52,9 @@
 
 ## MergerFS
 - https://github.com/mitre/fusera/wiki/FUSE-and-Docker
--
+- https://serverfault.com/questions/632075/convert-an-fstab-entry-to-a-systemd-mount-unit-on-coreos
+
+## Samba
 
 
 ## Rancher Config
