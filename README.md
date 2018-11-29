@@ -25,6 +25,13 @@
 
 
 
+# Ignition Customizations for other users:
+- `passwd.users.*.sshAuthorizedKeys.*`
+- Have atleast 1 data drive (> 1TB) formatted with ext4
+    - if your data disk isn't formatted yet, you can do so during installation, using `cfdisk` tool, or using "disk" attribute in
+- `storage.filesystem.*`
+
+
 
 # References
 

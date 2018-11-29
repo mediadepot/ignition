@@ -1,6 +1,18 @@
 {
   "ignition": {
-    "config": {},
+    "config": {
+      "append": [
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/base.json"
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/mergerfs.json"
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/rancher.json"
+        }
+      ]
+    },
     "timeouts": {},
     "version": "2.2.0"
   },
@@ -25,89 +37,26 @@
         "shell": "/bin/bash"
 
       }
-    ],
-    "groups": [
-      {
-        "name": "depot",
-        "gid": 15000,
-        "system": false
-      }
     ]
   },
   "storage": {
-    "files": [
+    "filesystems": [
       {
-        "filesystem": "root",
-        "path": "/opt/sbin/mergerfs",
-        "mode": 493,
-        "contents": { "source": "https://mediadepot.github.io/ignition/files/sbin/mergerfs-2.25.1" }
+        "mount": {
+          "device": "/dev/sdb",
+          "format": "ext4"
+        },
+        "path": "/mnt/drive1"
       },
       {
-        "filesystem": "root",
-        "path": "/opt/mediadepot/filesystem.sh",
-        "mode": 493,
-        "contents": { "source": "https://mediadepot.github.io/ignition/files/filesystem.sh" }
-      }
-    ],
-    "links": [
-      {
-        "filesystem": "root",
-        "path": "/opt/sbin/mount.mergerfs",
-        "target": "/opt/sbin/mergerfs"
+        "mount": {
+          "device": "/dev/sdc",
+          "format": "ext4"
+        },
+        "path": "/mnt/drive2"
       }
     ],
     "directories": [
-      {
-        "filesystem": "root",
-        "mode": 493,
-        "path": "/opt/sbin/"
-      },
-      {
-        "filesystem": "root",
-        "mode": 493,
-        "path": "/opt/sbin.workdir/"
-      },
-
-      {
-        "filesystem": "root",
-        "mode": 493,
-        "path": "/opt/mediadepot/rancher/"
-      },
-
-      {
-        "filesystem": "root",
-        "mode": 493,
-        "path": "/opt/mediadepot/apps/",
-        "user": {
-          "id": 15000
-        },
-        "group": {
-          "id": 15000
-        }
-      },
-
-      {
-        "filesystem": "root",
-        "mode": 493,
-        "path": "/media/storage/",
-        "user": {
-          "id": 15000
-        },
-        "group": {
-          "id": 15000
-        }
-      },
-      {
-        "filesystem": "root",
-        "mode": 493,
-        "path": "/media/temp/",
-        "user": {
-          "id": 15000
-        },
-        "group": {
-          "id": 15000
-        }
-      },
       {
         "filesystem": "root",
         "mode": 493,
@@ -118,33 +67,19 @@
         "group": {
           "id": 15000
         }
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/mnt/drive2/",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
       }
     ]
   },
-  "systemd": {
-    "units": [
-      {
-        "name":"usr-sbin.mount",
-        "enabled": true,
-        "contents": "[Unit]\nDescription=Overlay mount /usr/sbin mount\nBefore=local-fs.target\nConditionPathExists=/opt/sbin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/sbin\nOptions=lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/sbin.workdir\n\n[Install]\nWantedBy=local-fs.target"
-      },
-
-      {
-        "name": "media-storage.mount",
-        "enabled": true,
-        "contents": "[Unit]\nDescription = Mount mergerfs volume\nRequires = usr-sbin.mount\nAfter = usr-sbin.mount\n\n[Mount]\nWhat = /mnt/drive*\nWhere = /media/storage\nType = mergerfs\nOptions = direct_io,defaults,allow_other,minfreespace=50G,use_ino,fsname=mergerfs\n[Install]\nWantedBy = multi-user.target"
-      },
-      {
-        "name": "depot-filesystem.service",
-        "enabled": true,
-        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=media-storage.mount\nRequires=media-storage.mount\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
-      },
-
-      {
-        "name": "rancher.service",
-        "enabled": true,
-        "contents": "[Unit]\nDescription=Rancher Admin Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull rancher/rancher:stable\nExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -v /opt/mediadepot/rancher:/var/lib/rancher rancher/rancher:stable\nExecStop=/usr/bin/docker stop -t 15 %n\n\n\n[Install]\nWantedBy=multi-user.target"
-      }
-    ]
-  }
+  "systemd": {}
 }

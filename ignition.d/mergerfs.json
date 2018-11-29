@@ -1,0 +1,86 @@
+{
+  "ignition": {
+    "config": {},
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/sbin/mergerfs",
+        "mode": 493,
+        "contents": { "source": "https://mediadepot.github.io/ignition/files/sbin/mergerfs-2.25.1" }
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/filesystem.sh",
+        "mode": 493,
+        "contents": { "source": "https://mediadepot.github.io/ignition/files/filesystem.sh" }
+      }
+    ],
+    "links": [
+      {
+        "filesystem": "root",
+        "path": "/opt/sbin/mount.mergerfs",
+        "target": "/opt/sbin/mergerfs"
+      }
+    ],
+    "directories": [
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/opt/sbin/"
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/opt/sbin.workdir/"
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/media/storage/",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/media/temp/",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "name":"usr-sbin.mount",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Overlay mount /usr/sbin mount\nBefore=local-fs.target\nConditionPathExists=/opt/sbin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/sbin\nOptions=lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/sbin.workdir\n\n[Install]\nWantedBy=local-fs.target"
+      },
+
+      {
+        "name": "media-storage.mount",
+        "enabled": true,
+        "contents": "[Unit]\nDescription = Mount mergerfs volume\nRequires = usr-sbin.mount\nAfter = usr-sbin.mount\n\n[Mount]\nWhat = /mnt/drive*\nWhere = /media/storage\nType = mergerfs\nOptions = direct_io,defaults,allow_other,minfreespace=50G,use_ino,fsname=mergerfs\n[Install]\nWantedBy = multi-user.target"
+      },
+      {
+        "name": "depot-filesystem.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=media-storage.mount\nRequires=media-storage.mount\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
+      }
+    ]
+  }
+}
