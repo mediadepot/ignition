@@ -35,6 +35,14 @@
     ]
   },
   "storage": {
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/filesystem.sh",
+        "mode": 493,
+        "contents": { "source": "https://mediadepot.github.io/ignition/files/filesystem.sh" }
+      }
+    ],
     "directories": [
       {
         "filesystem": "root",
@@ -68,6 +76,17 @@
       {
         "filesystem": "root",
         "mode": 493,
+        "path": "/media/temp",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
         "path": "/mnt/drive1",
         "user": {
           "id": 15000
@@ -89,6 +108,11 @@
         "name": "mergerfs.service",
         "enabled": true,
         "contents": "[Unit]\nDescription=MergerFS Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull mediadepot/mergerfs\nExecStart=/usr/bin/docker run --rm --name %n --privileged --cap-add SYS_ADMIN --cap-add MKNOD --device /dev/fuse -v /mnt:/mnt -v /media:/media:shared mediadepot/mergerfs\nExecStop=/usr/bin/docker stop -t 40 %n\n\n\n[Install]\nWantedBy=multi-user.target"
+      },
+      {
+        "name": "filesystem.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=MergerFS Filesystem\nAfter=mergerfs.service media-storage.mount\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }

@@ -48,11 +48,11 @@
 - https://forums.docker.com/t/any-simple-and-safe-way-to-start-services-on-centos7-systemd/5695/11
 - https://fardog.io/blog/2017/12/30/running-docker-containers-with-systemd/
 - https://blog.marcnuri.com/docker-container-as-linux-system-service/
--
 
 ## MergerFS
 - https://github.com/mitre/fusera/wiki/FUSE-and-Docker
 - https://serverfault.com/questions/632075/convert-an-fstab-entry-to-a-systemd-mount-unit-on-coreos
+- https://hynek.me/articles/docker-signals/
 
 ## Samba
 
