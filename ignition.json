@@ -112,7 +112,7 @@
       {
         "name": "filesystem.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=MergerFS Filesystem\nAfter=mergerfs.service media-storage.mount\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
+        "contents": "[Unit]\nDescription=MergerFS Filesystem\nAfter=mergerfs.service media-storage.mount\nRequires=mergerfs.service media-storage.mount\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }
