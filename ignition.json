@@ -2,7 +2,7 @@
   "ignition": {
     "config": {},
     "timeouts": {},
-    "version": "2.1.0"
+    "version": "2.2.0"
   },
   "networkd": {},
   "passwd": {
@@ -12,9 +12,76 @@
         "sshAuthorizedKeys": [
           "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs="
         ]
+      },
+      {
+        "name": "depot",
+        "uid": 15000,
+        "primaryGroup": "depot",
+        "noUserGroup": true,
+        "system": false,
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs="
+        ],
+        "shell": "/bin/bash"
+
+      }
+    ],
+    "groups": [
+      {
+        "name": "depot",
+        "gid": 15000,
+        "system": false
       }
     ]
   },
-  "storage": {},
-  "systemd": {}
+  "storage": {
+    "directories": [
+      {
+        "path": "/opt/mediadepot/rancher"
+      },
+
+      {
+        "path": "/opt/mediadepot/apps",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
+      },
+
+      {
+        "path": "/media/storage",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
+      },
+      {
+        "path": "/mnt/drive1",
+        "user": {
+          "id": 15000
+        },
+        "group": {
+          "id": 15000
+        }
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "name": "rancher.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=Rancher Admin Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull rancher/rancher:stable\nExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -v /opt/mediadepot/rancher:/var/lib/rancher rancher/rancher:stable\nExecStop=/usr/bin/docker stop -t 2 %n\n\n\n[Install]\nWantedBy=multi-user.target"
+      },
+      {
+        "name": "mergerfs.service",
+        "enabled": true,
+        "contents": "[Unit]\nDescription=MergerFS Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull mediadepot/mergerfs\nExecStart=/usr/bin/docker run --rm --name %n --privileged --cap-add SYS_ADMIN --cap-add MKNOD --device /dev/fuse -v /mnt:/mnt -v /media:/media:shared mediadepot/mergerfs\nExecStop=/usr/bin/docker stop -t 2 %n\n\n\n[Install]\nWantedBy=multi-user.target"
+      }
+    ]
+  }
 }

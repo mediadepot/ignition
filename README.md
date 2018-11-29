@@ -1,35 +1,24 @@
 # Usage
 
 1. Download bootable CoreOS image from https://coreos.com/os/docs/latest/booting-with-iso.html
-    - Eventually will be replaced with custom Mediadepot customized iso.
-2. Create bootable USB with contents of CoreOS image using __________
-3. Add the following `ignition` configuration file to the USB.
-    ```yaml
-{
-  "ignition": {
-    "version": "2.2.0",
-    "config": {
-      "replace": {
-        "source": "https://mediadepot.github.io/ignition/ignition.json"
-      }
-    }
-  }
-}
-    ```
-4. Start server and boot from CoreOS USB.
-5. Determine the OS installation disk
+2. Create bootable USB/CD with contents of CoreOS image
+3. Start server and boot from CoreOS USB/CD.
+4. Determine the OS installation disk
     ```bash
     sudo fdisk -l
 
     # note, the boot disk will probably be /dev/loop0
     ```
-
+5. Copy the ignition remote config bootstrap file to the file system
+    ```bash
+    curl -O https://mediadepot.github.io/ignition/ignition-remote.json
+    ```
 6. Begin CoreOS installation on specified disk, **NOTE: specified disk will be reformatted**
     ```bash
-    coreos-install -d /dev/sda -C stable -i ignition.json
+    sudo coreos-install -d /dev/sda -C stable -i ignition-remote.json
     ```
 
-7. On installation completion, remove bootable USB
+7. On installation completion, remove bootable USB/CD
 8. Restart server
 9. Wait for CoreOS to start and `cloud-init` process to complete.
 10. Go to `http://depot:50000` to see Rancher v2 dashboard and begin setup.
@@ -39,6 +28,8 @@
 
 # References
 
+
+## CoreOS configuration
 - https://coreos.com/os/docs/latest/booting-with-iso.html
 - https://davranetworks.atlassian.net/wiki/spaces/MAN/pages/80936975/Bare+metal+install+of+CoreOS
 - https://coreos.com/os/docs/latest/installing-to-disk.html
@@ -47,3 +38,17 @@
 - https://developer.atlassian.com/blog/2015/03/docker-systemd-socket-activation/
 - https://coreos.com/ignition/docs/latest/examples.html
 - https://coreos.com/validate/
+- https://karlstoney.com/2017/03/03/docker-containers-as-systemd-services/
+- https://container-solutions.com/running-docker-containers-with-systemd/
+- https://github.com/coreos/ignition/blob/master/doc/configuration-v2_2.md
+
+## MergerFS
+- https://github.com/mitre/fusera/wiki/FUSE-and-Docker
+-
+
+
+## Rancher Config
+- https://github.com/jmreicha/awesome-rancher
+- https://rancher.com/docs/rancher/v2.x/en/upgrades/rollbacks/single-node-rollbacks/
+- https://rancher.com/docs/rancher/v2.x/en/installation/single-node/
+- https://rancher.com/docs/rancher/v2.x/en/backups/backups/single-node-backups/
