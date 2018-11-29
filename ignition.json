@@ -54,19 +54,19 @@
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/etc/systemd/system/media-storage.mount.wants"
+        "path": "/etc/systemd/system/media-storage.mount.wants/"
       },
 
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/opt/mediadepot/rancher"
+        "path": "/opt/mediadepot/rancher/"
       },
 
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/opt/mediadepot/apps",
+        "path": "/opt/mediadepot/apps/",
         "user": {
           "id": 15000
         },
@@ -78,7 +78,7 @@
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/media/storage",
+        "path": "/media/storage/",
         "user": {
           "id": 15000
         },
@@ -89,7 +89,7 @@
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/media/temp",
+        "path": "/media/temp/",
         "user": {
           "id": 15000
         },
@@ -100,7 +100,7 @@
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/mnt/drive1",
+        "path": "/mnt/drive1/",
         "user": {
           "id": 15000
         },
