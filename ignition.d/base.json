@@ -26,6 +26,11 @@
         "group": {
           "id": 15000
         }
+      },
+      {
+        "filesystem": "root",
+        "mode": 493,
+        "path": "/opt/mediadepot/bootstrap/"
       }
     ]
   },

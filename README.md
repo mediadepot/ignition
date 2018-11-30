@@ -89,3 +89,8 @@ cp -r bin/ /mounted/files/
 - https://rancher.com/docs/rancher/v2.x/en/upgrades/rollbacks/single-node-rollbacks/
 - https://rancher.com/docs/rancher/v2.x/en/installation/single-node/
 - https://rancher.com/docs/rancher/v2.x/en/backups/backups/single-node-backups/
+- https://gist.github.com/superseb/c363247c879e96c982495daea1125276
+- https://github.com/rancher/rancher/issues/16225
+- https://github.com/rancher/rancher/issues/15477
+- https://github.com/rancher/rancher/issues/13271
+- https://github.com/rancher/cli

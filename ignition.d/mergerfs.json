@@ -16,7 +16,7 @@
       },
       {
         "filesystem": "root",
-        "path": "/opt/mediadepot/filesystem.sh",
+        "path": "/opt/mediadepot/bootstrap/filesystem.sh",
         "mode": 493,
         "contents": { "source": "https://mediadepot.github.io/ignition/files/filesystem.sh" }
       }
@@ -37,7 +37,7 @@
       {
         "filesystem": "root",
         "mode": 493,
-        "path": "/opt/sbin.workdir/"
+        "path": "/opt/mediadepot/bootstrap/sbin.workdir/"
       },
       {
         "filesystem": "root",
@@ -68,7 +68,7 @@
       {
         "name":"usr-sbin.mount",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Overlay mount /usr/sbin mount\nBefore=local-fs.target\nConditionPathExists=/opt/sbin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/sbin\nOptions=lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/sbin.workdir\n\n[Install]\nWantedBy=local-fs.target"
+        "contents": "[Unit]\nDescription=Overlay mount /usr/sbin mount\nBefore=local-fs.target\nConditionPathExists=/opt/sbin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/sbin\nOptions=lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/mediadepot/bootstrap/sbin.workdir\n\n[Install]\nWantedBy=local-fs.target"
       },
 
       {
@@ -79,7 +79,7 @@
       {
         "name": "depot-filesystem.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=media-storage.mount\nRequires=media-storage.mount\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
+        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=media-storage.mount\nRequires=media-storage.mount\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/bootstrap/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }
