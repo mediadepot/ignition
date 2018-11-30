@@ -1,0 +1,5 @@
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "depot.lan"
+watch = true
+exposedbydefault = false
