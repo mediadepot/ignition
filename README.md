@@ -94,3 +94,11 @@ cp -r bin/ /mounted/files/
 - https://github.com/rancher/rancher/issues/15477
 - https://github.com/rancher/rancher/issues/13271
 - https://github.com/rancher/cli
+
+
+## Portainer
+- https://portainer.readthedocs.io/en/stable/configuration.html
+- https://app.swaggerhub.com/apis/deviantony/Portainer/1.19.2/#/templates/TemplateList
+- https://tools.linuxserver.io/portainer.json
+- https://blog.linuxserver.io/2017/11/28/how-to-setup-a-reverse-proxy-with-letsencrypt-ssl-for-all-your-docker-apps/
+- https://blog.linuxserver.io/2018/02/03/using-traefik-as-a-reverse-proxy-with-docker/

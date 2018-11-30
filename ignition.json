@@ -12,7 +12,7 @@
           "source": "https://mediadepot.github.io/ignition/ignition.d/samba.json"
         },
         {
-          "source": "https://mediadepot.github.io/ignition/ignition.d/rancher.json"
+          "source": "https://mediadepot.github.io/ignition/ignition.d/portainer.json"
         }
       ]
     },
