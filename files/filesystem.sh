@@ -13,4 +13,4 @@ mkdir -p /media/storage/downloads
 # chown all directories to make sure permissions are set correctly.
 chown -R depot:depot /media/temp/processing
 chown -R depot:depot /media/temp/blackhole
-chown -R depot:depot /media/storage/downloads
+chown -R depot:depot /media/storage

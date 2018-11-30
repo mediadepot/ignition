@@ -9,6 +9,9 @@
           "source": "https://mediadepot.github.io/ignition/ignition.d/mergerfs.json"
         },
         {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/samba.json"
+        },
+        {
           "source": "https://mediadepot.github.io/ignition/ignition.d/rancher.json"
         }
       ]
