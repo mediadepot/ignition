@@ -13,6 +13,9 @@
         },
         {
           "source": "https://mediadepot.github.io/ignition/ignition.d/portainer.json"
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/traefik.json"
         }
       ]
     },
