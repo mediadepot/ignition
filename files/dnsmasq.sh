@@ -7,4 +7,6 @@ exec /usr/bin/docker run --rm --name $1 -p 53:53/tcp -p 53:53/udp --cap-add=NET_
     --domain-needed \
     --local-service \
     --no-resolv \
-    --server /depot.lan/${IP_ADDRESS}
+    --listen-address=127.0.0.1 \
+    --listen-address=${IP_ADDRESS} \
+    --address /depot.lan/${IP_ADDRESS}
