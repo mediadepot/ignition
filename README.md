@@ -21,7 +21,7 @@
 7. On installation completion, remove bootable USB/CD
 8. Restart server
 9. Wait for CoreOS to start and `cloud-init` process to complete.
-10. Go to `http://depot:50000` to see Rancher v2 dashboard and begin setup.
+10. Go to `http://admin.depot.lan` to see Portainer dashboard and begin setup.
 
 
 
