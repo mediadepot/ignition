@@ -20,7 +20,7 @@
       {
         "name": "portainer.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Portainer Admin Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull portainer/portainer\nExecStart=/usr/bin/docker run --rm --name %n -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/mediadepot/portainer:/data portainer/portainer --no-analytics --templates=https://mediadepot.github.io/templates/portainer.json --host=unix:///var/run/docker.sock\nExecStop=/usr/bin/docker stop -t 15 %n\n\n\n[Install]\nWantedBy=multi-user.target"
+        "contents": "[Unit]\nDescription=Portainer Admin Container\nAfter=docker.service\nRequires=docker.service\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull portainer/portainer\nExecStart=/usr/bin/docker run --rm --name %n -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/mediadepot/portainer:/data portainer/portainer --no-analytics --templates=https://mediadepot.github.io/templates/portainer.json --label traefik.enable=true --label traefik.port=9000 --label traefik.frontend.rule=Host:admin.depot.lan --host=unix:///var/run/docker.sock\nExecStop=/usr/bin/docker stop -t 15 %n\n\n\n[Install]\nWantedBy=multi-user.target"
       }
     ]
   }
