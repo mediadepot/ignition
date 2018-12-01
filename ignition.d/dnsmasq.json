@@ -21,7 +21,7 @@
       {
         "name": "dnsmasq.service",
         "enabled": true,
-        "contents": "[Unit]\nDescription=Dnsmasq Container\nAfter=docker.service network-online.target\nRequires=docker.service network-online.target\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull andyshinn/dnsmasq\nExecStart=/opt/mediadepot/bootstrap/dnsmasq.sh %n\nExecStop=/usr/bin/docker stop -t 30 %n\n\n[Install]\nWantedBy=multi-user.target\n"
+        "contents": "[Unit]\nDescription=Dnsmasq Container\nAfter=docker.service network-online.target\nRequires=docker.service network-online.target\n\n[Service]\nTimeoutStartSec=0\nRestart=always\nExecStartPre=-/usr/bin/docker kill %n\nExecStartPre=-/usr/bin/docker rm %n\nExecStartPre=-/usr/bin/docker pull andyshinn/dnsmasq:2.75\nExecStart=/opt/mediadepot/bootstrap/dnsmasq.sh %n\nExecStop=/usr/bin/docker stop -t 30 %n\n\n[Install]\nWantedBy=multi-user.target\n"
       }
     ]
   }
