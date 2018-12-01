@@ -6,7 +6,6 @@ exec /usr/bin/docker run --rm --name $1 --network=host --cap-add=NET_ADMIN andys
     --log-facility=- \
     --bogus-priv \
     --domain-needed \
-    --no-resolv \
     --local-service \
     --local=/depot.lan/ \
     --listen-address=127.0.0.1 \
