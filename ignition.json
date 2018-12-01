@@ -16,6 +16,9 @@
         },
         {
           "source": "https://mediadepot.github.io/ignition/ignition.d/traefik.json"
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json"
         }
       ]
     },
