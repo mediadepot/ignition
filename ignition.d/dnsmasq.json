@@ -14,7 +14,7 @@
         "mode": 493,
         "contents": { "source": "https://mediadepot.github.io/ignition/files/dnsmasq.sh" }
       }
-    ],
+    ]
   },
   "systemd": {
     "units": [
