@@ -25,7 +25,7 @@ systemd:
       ExecStartPre=-/usr/bin/docker kill %n
       ExecStartPre=-/usr/bin/docker rm %n
       ExecStartPre=-/usr/bin/docker pull mediadepot/smartmontools
-      ExecStart=/usr/bin/docker run --rm --name %n -v /opt/mediadepot/smartmontools/smartd.conf:/etc/smartd.conf:ro -v /opt/mediadepot/smartmontools/smartd_warning.d/:/etc/smartd_warning.d/ -v /etc/default/mediadepot/notify.yaml:/etc/default/mediadepot/notify.yaml --bind /dev:/dev mediadepot/smartmontools
+      ExecStart=/usr/bin/docker run --rm --name %n -v /opt/mediadepot/smartmontools/smartd.conf:/etc/smartd.conf:ro -v /opt/mediadepot/smartmontools/smartd_warning.d/:/etc/smartd_warning.d/ -v /etc/default/mediadepot/notify.yaml:/etc/default/mediadepot/notify.yaml --privileged mediadepot/smartmontools
       ExecStop=/usr/bin/docker stop -t 15 %n
 
       [Install]
