@@ -18,6 +18,7 @@ jobs:
             mkdir ~/dist
             mkdir -p ~/dist/ignition.d
             cp *.json ~/dist
+            cp -R opt ~/dist
 
             ./ct -strict -pretty -in-file ignition.yaml -out-file ~/dist/ignition.json -files-dir=files/  -platform=custom
 
