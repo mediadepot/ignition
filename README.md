@@ -37,6 +37,10 @@
 - `storage.filesystem.*`
 
 
+#prerequsites:
+- node has a static IP, using DHCP or route reservation
+-
+
 
 # References
 

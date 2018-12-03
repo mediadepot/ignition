@@ -8,6 +8,8 @@ ignition:
     - source: https://mediadepot.github.io/ignition/ignition.d/portainer.json
     - source: https://mediadepot.github.io/ignition/ignition.d/traefik.json
     - source: https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/notifications.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/smartmontools.json
   timeouts: {}
 networkd: {}
 passwd:
