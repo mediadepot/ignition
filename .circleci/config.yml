@@ -37,8 +37,8 @@ jobs:
 
             cd ~/dist
             git init
-            git checkout -b gh-pages
+            git checkout -b dist
             git add -A
             git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
             git remote add origin git@github.com:mediadepot/ignition.git
-            git push --force origin gh-pages:gh-pages
+            git push --force origin dist:dist
