@@ -16,6 +16,7 @@ jobs:
           name: Transpile Configs to JSON
           command: |
             mkdir ~/dist
+            mkdir -p ~/dist/ignition.d
             cp *.json ~/dist
 
             ./ct -strict -pretty -in-file ignition.yaml -out-file ~/dist/ignition.json -files-dir=files/  -platform=custom
@@ -24,7 +25,7 @@ jobs:
             do
                 if [[ -f $file ]]; then
                     echo "writing config to: ~/dist/${file%.yaml}.json"
-                    mkdir -p "~/dist/$(dirname "$file")"
+                  
                     ./ct -strict -pretty -in-file $file -out-file "~/dist/${file%.yaml}.json" -files-dir=files/  -platform=custom
                 fi
             done
