@@ -46,7 +46,7 @@ storage:
     path: "/etc/systemd/system/media-storage.d"
   files:
   - filesystem: root
-    path: "/etc/systemd/system/media-storage.d/overrides.conf"
+    path: "/etc/systemd/system/media-storage.mount.d/overrides.conf"
     mode: 493
     contents:
       inline: |
