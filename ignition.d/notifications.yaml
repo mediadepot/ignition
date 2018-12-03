@@ -4,5 +4,12 @@ ignition:
   timeouts: {}
 networkd: {}
 passwd: {}
-storage: {}
+storage:
+  files:
+  - filesystem: root
+    path: "/opt/mediadepot/smartmontools/smartd_warning.d/pushover.sh"
+    mode: 493
+    contents:
+      local: notify/smartd_warning.d/pushover.sh
 systemd: {}
+

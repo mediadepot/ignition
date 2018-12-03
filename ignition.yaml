@@ -43,19 +43,43 @@ storage:
       id: 15000
   files:
   - filesystem: root
+    path: "/etc/default/mediadepot/notify.yaml"
+    mode: 384 #octal 600
+    contents:
+      inline: |
+        ---
+        pushover_user_key: pushover1234
+
+  - filesystem: root
     path: "/etc/systemd/system/media-storage.mount.d/overrides.conf"
     contents:
       inline: |
         [Unit]
         Requires = mnt-drive1.mount mnt-drive2.mount
         After = mnt-drive1.mount mnt-drive2.mount
+  - filesystem: root
+    path: "/opt/mediadepot/smartmontools/smartd.conf"
+    contents:
+      inline: |
+        # Configuration file for smartd.
+        # -a | monitor all SMART properties
+        # -o | [ATA only] Enables SMART Automatic Offline Testing when smartd starts up and has no further effect. The valid arguments to this Directive are on and off.
+        # -m | Send a warning email to the email address ADD if the '-H', '-l', '-f', '-C', or '-O' Directives detect a failure or a new error, or if a SMART command to the disk fails.
+        # -M | modify the behavior of the smartd email warnings enabled with the '-m' email Directive. un the executable PATH instead of the default mail command, when smartd needs to send email. PATH must point to an executable binary file or script.
+        # -s | Run Self-Tests or Offline Immediate Tests, at scheduled times. A Self- or Offline Immediate Test will be run at the end of periodic device polling, if all 12 characters of the string T/MM/DD/d/HH match the extended regular expression
+        #
+        # S/../.././02 | schedule a short Self-Test between 2-3 am every morning
+        # L/../../6/03 | schedule a long Self-Test between 3-4 am every Saturday morning
+        /dev/sda -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdb -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+
 systemd:
   units:
   - name: mnt-drive1.mount
     enable: true
     contents: |-
       [Mount]
-      What=/dev/sdb
+      What=/dev/sda
       Where=/mnt/drive1
       Type=ext4
 
