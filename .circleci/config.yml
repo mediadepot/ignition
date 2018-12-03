@@ -16,12 +16,12 @@ jobs:
           name: Transpile Configs to JSON
           command: |
 
-            ct -strict -pretty -in-file ignition.yaml -out-file ignition.json -files-dir=files/  -platform=custom
+            ./ct -strict -pretty -in-file ignition.yaml -out-file ignition.json -files-dir=files/  -platform=custom
 
             for file in ignition.d/*
             do
                 if [[ -f $file ]]; then
-                    ct -strict -pretty -in-file $file -out-file "${file%.yaml}.json" -files-dir=files/  -platform=custom
+                    ./ct -strict -pretty -in-file $file -out-file "${file%.yaml}.json" -files-dir=files/  -platform=custom
                 fi
             done
       - deploy:
