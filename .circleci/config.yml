@@ -42,3 +42,4 @@ jobs:
             git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
             git remote add origin git@github.com:mediadepot/ignition.git
             git push --force origin dist:dist
+            
