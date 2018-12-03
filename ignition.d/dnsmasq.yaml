@@ -1,0 +1,35 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  files:
+  - filesystem: root
+    path: "/opt/mediadepot/bootstrap/dnsmasq.sh"
+    mode: 493
+    contents:
+      remote:
+        url: https://mediadepot.github.io/ignition/files/dnsmasq.sh
+systemd:
+  units:
+  - name: dnsmasq.service
+    enabled: true
+    contents: |
+      [Unit]
+      Description=Dnsmasq Container
+      After=docker.service network-online.target
+      Requires=docker.service network-online.target
+
+      [Service]
+      TimeoutStartSec=0
+      Restart=always
+      ExecStartPre=-/usr/bin/docker kill %n
+      ExecStartPre=-/usr/bin/docker rm %n
+      ExecStartPre=-/usr/bin/docker pull andyshinn/dnsmasq:2.75
+      ExecStart=/opt/mediadepot/bootstrap/dnsmasq.sh %n
+      ExecStop=/usr/bin/docker stop -t 30 %n
+
+      [Install]
+      WantedBy=multi-user.target

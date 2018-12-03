@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.3-jessie
+    branches:
+      only:
+        - master
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install Container Linux Config Transpiler
+          command: curl -o ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.9.0/ct-v0.9.0-x86_64-unknown-linux-gnu && chmod +x ct
+      - run:
+          name: Transpile Configs to JSON
+          command: |
+
+            ct -strict -pretty -in-file ignition.yaml -out-file ignition.json -files-dir=files/  -platform=custom
+
+            for file in ignition.d/*
+            do
+                if [[ -f $file ]]; then
+                    ct -strict -pretty -in-file $file -out-file "${file%.yaml}.json" -files-dir=files/  -platform=custom
+                fi
+            done
+      - deploy:
+          name: "Deploy to GH-Pages"
+          command: |
+            git config --global user.email circleci@circleci
+            git config --global user.name CircleCI
+
+            rm -rf .git
+            git init
+            git checkout gh-pages
+            git add -A
+            git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
+            git remote add origin git@github.com:mediadepot/ignition.git
+            git push --force origin gh-pages:gh-pages

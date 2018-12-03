@@ -1,0 +1,23 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd:
+  groups:
+  - name: depot
+    gid: 15000
+    system: false
+storage:
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/opt/mediadepot/apps/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/opt/mediadepot/bootstrap/"
+systemd: {}
