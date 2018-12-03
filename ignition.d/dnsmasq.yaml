@@ -10,8 +10,7 @@ storage:
     path: "/opt/mediadepot/bootstrap/dnsmasq.sh"
     mode: 493
     contents:
-      remote:
-        url: https://mediadepot.github.io/ignition/files/dnsmasq.sh
+      local: dnsmasq.sh
 systemd:
   units:
   - name: dnsmasq.service

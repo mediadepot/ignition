@@ -10,8 +10,7 @@ storage:
     path: "/opt/mediadepot/traefik/traefik.toml"
     mode: 493
     contents:
-      remote:
-       url: https://mediadepot.github.io/ignition/files/traefik.toml
+      local: traefik.toml
   directories:
   - filesystem: root
     mode: 493

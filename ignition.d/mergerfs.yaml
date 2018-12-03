@@ -16,8 +16,7 @@ storage:
     path: "/opt/mediadepot/bootstrap/filesystem.sh"
     mode: 493
     contents:
-      remote:
-        url: https://mediadepot.github.io/ignition/files/filesystem.sh
+      local: filesystem.sh
   links:
   - filesystem: root
     path: "/opt/sbin/mount.mergerfs"
