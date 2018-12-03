@@ -1,0 +1,39 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  files:
+  - filesystem: root
+    path: "/opt/mediadepot/traefik/traefik.toml"
+    mode: 493
+    contents:
+      remote:
+       url: https://mediadepot.github.io/ignition/files/traefik.toml
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/opt/mediadepot/traefik/"
+systemd:
+  units:
+  - name: traefik.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Traefik Router Container
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      TimeoutStartSec=0
+      Restart=always
+      ExecStartPre=-/usr/bin/docker kill %n
+      ExecStartPre=-/usr/bin/docker rm %n
+      ExecStartPre=-/usr/bin/docker pull traefik:alpine
+      ExecStart=/usr/bin/docker run --rm --name %n -p 80:80 -p 443:443 -v /var/run/docker.sock:/var/run/docker.sock:ro -v /opt/mediadepot/traefik/traefik.toml:/etc/traefik/traefik.toml traefik:alpine
+      ExecStop=/usr/bin/docker stop -t 15 %n
+
+      [Install]
+      WantedBy=multi-user.target

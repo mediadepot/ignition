@@ -1,3 +1,8 @@
+# MediaDepot Ignition
+
+
+
+
 # Usage
 
 1. Download bootable CoreOS image from https://coreos.com/os/docs/latest/booting-with-iso.html
@@ -102,3 +107,16 @@ cp -r bin/ /mounted/files/
 - https://tools.linuxserver.io/portainer.json
 - https://blog.linuxserver.io/2017/11/28/how-to-setup-a-reverse-proxy-with-letsencrypt-ssl-for-all-your-docker-apps/
 - https://blog.linuxserver.io/2018/02/03/using-traefik-as-a-reverse-proxy-with-docker/
+
+
+## Notifications
+- https://github.com/netdata/netdata/wiki/pushover-notifications
+- https://www.reddit.com/r/homeautomation/comments/76eqmd/notification_options_slack_vs_pushover_vs/
+- https://serverfault.com/questions/694818/get-notification-when-systemd-monitored-service-enters-failed-state
+
+
+## Smartmontools
+- https://www.maketecheasier.com/monitor-hard-disk-health-linux/
+- https://www.reddit.com/r/linux/comments/5vemxu/otakutocrazydiskinfo_crazydiskinfo_an_interactive/
+- https://www.reddit.com/r/DataHoarder/comments/7sx623/disk_health_check_programs_for_linuxmac/
+- LIBATASMART

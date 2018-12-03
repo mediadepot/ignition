@@ -1,0 +1,63 @@
+---
+ignition:
+  config:
+    append:
+    - source: https://mediadepot.github.io/ignition/ignition.d/base.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/mergerfs.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/samba.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/portainer.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/traefik.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json
+  timeouts: {}
+networkd: {}
+passwd:
+  users:
+  - name: core
+    ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs=
+  - name: depot
+    uid: 15000
+    primary_group: depot
+    no_user_group: true
+    system: false
+    ssh_authorized_keys:
+    - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs=
+    shell: "/bin/bash"
+storage:
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/mnt/drive1/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/mnt/drive2/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+systemd:
+  units:
+  - name: mnt-drive1.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/dev/sdb
+      Where=/mnt/drive1
+      Type=ext4
+
+      [Install]
+      WantedBy=local-fs.target
+  - name: mnt-drive2.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/dev/sdb
+      Where=/mnt/drive1
+      Type=ext4
+
+      [Install]
+      WantedBy=local-fs.target

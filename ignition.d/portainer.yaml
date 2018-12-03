@@ -1,0 +1,32 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  directories:
+  - filesystem: root
+    mode: 493
+    path: "/opt/mediadepot/portainer/"
+systemd:
+  units:
+  - name: portainer.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Portainer Admin Container
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      TimeoutStartSec=0
+      Restart=always
+      ExecStartPre=-/usr/bin/docker kill %n
+      ExecStartPre=-/usr/bin/docker rm %n
+      ExecStartPre=-/usr/bin/docker pull portainer/portainer
+      ExecStart=/usr/bin/docker run --rm --name %n -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/mediadepot/portainer:/data --label traefik.enable=true --label traefik.port=9000 --label traefik.frontend.rule=Host:admin.depot.lan portainer/portainer --no-analytics --templates=https://mediadepot.github.io/templates/portainer.json  --host=unix:///var/run/docker.sock
+      ExecStop=/usr/bin/docker stop -t 15 %n
+
+      [Install]
+      WantedBy=multi-user.target
