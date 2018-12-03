@@ -7,7 +7,7 @@ passwd: {}
 storage:
   directories:
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/opt/mediadepot/portainer/"
 systemd:
   units:

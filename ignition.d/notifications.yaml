@@ -8,7 +8,7 @@ storage:
   files:
   - filesystem: root
     path: "/opt/mediadepot/smartmontools/smartd_warning.d/pushover.sh"
-    mode: 493
+    mode: 493 #755
     contents:
       local: notify/smartd_warning.d/pushover.sh
 systemd: {}

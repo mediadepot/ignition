@@ -28,14 +28,14 @@ passwd:
 storage:
   directories:
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/mnt/drive1/"
     user:
       id: 15000
     group:
       id: 15000
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/mnt/drive2/"
     user:
       id: 15000
@@ -44,7 +44,7 @@ storage:
   files:
   - filesystem: root
     path: "/etc/default/mediadepot/notify.yaml"
-    mode: 384 #octal 600
+    mode: 384 #600
     contents:
       inline: |
         ---
@@ -52,13 +52,17 @@ storage:
 
   - filesystem: root
     path: "/etc/systemd/system/media-storage.mount.d/overrides.conf"
+    mode: 420 #644
     contents:
       inline: |
         [Unit]
-        Requires = mnt-drive1.mount mnt-drive2.mount
-        After = mnt-drive1.mount mnt-drive2.mount
+        Requires = mnt-drive1.mount
+        Requires = mnt-drive2.mount
+        After = mnt-drive1.mount
+        After = mnt-drive2.mount
   - filesystem: root
     path: "/opt/mediadepot/smartmontools/smartd.conf"
+    mode: 420 #644
     contents:
       inline: |
         # Configuration file for smartd.

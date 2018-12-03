@@ -8,13 +8,13 @@ storage:
   files:
   - filesystem: root
     path: "/opt/sbin/mergerfs"
-    mode: 493
+    mode: 493 #755
     contents:
       remote:
         url: https://mediadepot.github.io/ignition/opt/sbin/mergerfs-2.25.1
   - filesystem: root
     path: "/opt/mediadepot/bootstrap/filesystem.sh"
-    mode: 493
+    mode: 493 #755
     contents:
       local: filesystem.sh
   links:
@@ -23,17 +23,17 @@ storage:
     target: "/opt/sbin/mergerfs"
   directories:
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/opt/mediadepot/bootstrap/sbin.workdir/"
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/media/storage/"
     user:
       id: 15000
     group:
       id: 15000
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/media/temp/"
     user:
       id: 15000

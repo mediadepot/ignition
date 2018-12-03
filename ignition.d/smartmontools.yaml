@@ -7,7 +7,7 @@ passwd: {}
 storage:
   directories:
   - filesystem: root
-    mode: 493
+    mode: 493 #755
     path: "/opt/mediadepot/smartmontools/smartd_warning.d"
 systemd:
   units:
