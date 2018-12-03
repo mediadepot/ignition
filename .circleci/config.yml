@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run:
           name: Install Container Linux Config Transpiler
-          command: curl -o ~/ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.9.0/ct-v0.9.0-x86_64-unknown-linux-gnu && chmod +x ct
+          command: curl -o ct -L https://github.com/coreos/container-linux-config-transpiler/releases/download/v0.9.0/ct-v0.9.0-x86_64-unknown-linux-gnu && chmod +x ct
       - run:
           name: Transpile Configs to JSON
           command: |
