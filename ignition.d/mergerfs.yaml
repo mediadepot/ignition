@@ -24,9 +24,6 @@ storage:
   directories:
   - filesystem: root
     mode: 493
-    path: "/opt/sbin/"
-  - filesystem: root
-    mode: 493
     path: "/opt/mediadepot/bootstrap/sbin.workdir/"
   - filesystem: root
     mode: 493

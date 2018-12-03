@@ -11,10 +11,6 @@ storage:
     mode: 493
     contents:
       local: traefik.toml
-  directories:
-  - filesystem: root
-    mode: 493
-    path: "/opt/mediadepot/traefik/"
 systemd:
   units:
   - name: traefik.service

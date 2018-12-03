@@ -58,7 +58,7 @@
 - https://coreos.com/validate/
 - https://github.com/coreos/ignition/blob/master/doc/configuration-v2_2.md
 - `journalctl --identifier=ignition`
-
+-
 
 # SystemD
 - https://container-solutions.com/running-docker-containers-with-systemd/
@@ -71,7 +71,7 @@
 - https://blog.marcnuri.com/docker-container-as-linux-system-service/
 - https://unix.stackexchange.com/questions/441894/wait-to-start-transmission-daemon-until-after-usb-drive-has-mounted
 - `systemctl list-units --all`
--
+- https://fedoraproject.org/wiki/Packaging:Systemd#EnvironmentFiles_and_support_for_.2Fetc.2Fsysconfig_files
 
 ## MergerFS
 - https://github.com/mitre/fusera/wiki/FUSE-and-Docker
