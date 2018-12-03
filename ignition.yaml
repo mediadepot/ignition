@@ -39,6 +39,19 @@ storage:
       id: 15000
     group:
       id: 15000
+  - filesystem: root
+    mode: 493
+    path: "/etc/systemd/system/media-storage.d"
+  files:
+  - filesystem: root
+    path: "/etc/systemd/system/media-storage.d/overrides.conf"
+    mode: 493
+    contents:
+      inline: |
+        [Unit]
+        Requires = mnt-drive1.mount mnt-drive2.mount
+        After = mnt-drive1.mount mnt-drive2.mount
+
 systemd:
   units:
   - name: mnt-drive1.mount

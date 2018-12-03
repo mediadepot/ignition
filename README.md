@@ -40,6 +40,9 @@
 
 # References
 
+## CT Transpiler
+- https://coreos.com/os/docs/latest/overview-of-ct.html
+- https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md
 
 ## CoreOS configuration
 - https://coreos.com/os/docs/latest/booting-with-iso.html
