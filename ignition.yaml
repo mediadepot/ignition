@@ -74,8 +74,8 @@ storage:
         #
         # S/../.././02 | schedule a short Self-Test between 2-3 am every morning
         # L/../../6/03 | schedule a long Self-Test between 3-4 am every Saturday morning
-        /dev/sda -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
         /dev/sdb -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdc -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
 
 systemd:
   units:
@@ -83,7 +83,7 @@ systemd:
     enable: true
     contents: |-
       [Mount]
-      What=/dev/sda
+      What=/dev/sdb
       Where=/mnt/drive1
       Type=ext4
 
@@ -93,8 +93,8 @@ systemd:
     enable: true
     contents: |-
       [Mount]
-      What=/dev/sdb
-      Where=/mnt/drive1
+      What=/dev/sdc
+      Where=/mnt/drive2
       Type=ext4
 
       [Install]
