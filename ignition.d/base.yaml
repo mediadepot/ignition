@@ -8,13 +8,6 @@ passwd:
   - name: depot
     gid: 15000
     system: false
-  users:
-  - name: depot
-    uid: 15000
-    primary_group: depot
-    no_user_group: true
-    system: false
-    shell: "/bin/bash"
 storage:
   directories:
   - filesystem: root
