@@ -26,7 +26,7 @@ jobs:
                 if [[ -f $file ]]; then
                     echo "writing config to: ~/dist/${file%.yaml}.json"
 
-                    ./ct -strict -pretty -in-file $file -out-file "~/dist/${file%.yaml}.json" -files-dir=files/  -platform=custom
+                    ./ct -strict -pretty -in-file $file -out-file ~/dist/${file%.yaml}.json -files-dir=files/  -platform=custom
                 fi
             done
       - deploy:
