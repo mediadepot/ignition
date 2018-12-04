@@ -10,7 +10,12 @@ storage:
     path: "/opt/mediadepot/traefik/traefik.toml"
     mode: 493 #755
     contents:
-      local: traefik.toml
+      inline: |-
+        [docker]
+        endpoint = "unix:///var/run/docker.sock"
+        domain = "depot.lan"
+        watch = true
+        exposedbydefault = false
 systemd:
   units:
   - name: traefik.service
