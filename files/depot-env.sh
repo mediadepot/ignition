@@ -8,5 +8,9 @@ EOL
 
 cat >/etc/systemd/system/docker.service.d/docker-opts.conf <<EOL
 [Service]
-Environment=DOCKER_OPTS="--dns=${IP_ADDRESS}"
+Environment="DOCKER_OPTS=--dns=${IP_ADDRESS}"
 EOL
+
+# restart Docker Daemon after changing opts.
+systemctl daemon-reload
+systemctl restart docker.service

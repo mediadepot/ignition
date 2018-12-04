@@ -15,18 +15,6 @@ storage:
     mode: 493 #755
     contents:
       local: depot-env.sh
-
-  - filesystem: root
-    path: "/etc/systemd/system/docker.service.d/block-docker.conf"
-    mode: 493 #755
-    contents:
-      inline: |-
-        # block docker.service until environmental variable files have been created.
-        [Unit]
-        After=depot-env.service
-        Requires=depot-env.service
-
-
   directories:
   - filesystem: root
     mode: 493 #755
@@ -41,6 +29,9 @@ storage:
   - filesystem: root
     mode: 493
     path: "/etc/sysconfig/"
+  - filesystem: root
+    mode: 493
+    path: "/etc/systemd/system/docker.service.d/"
 systemd:
   units:
   - name: depot-env.service
