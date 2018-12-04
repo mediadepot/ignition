@@ -38,6 +38,9 @@ storage:
   - filesystem: root
     mode: 493
     path: "/opt/mediadepot/bootstrap/"
+  - filesystem: root
+    mode: 493
+    path: "/etc/sysconfig/"
 systemd:
   units:
   - name: depot-env.service
