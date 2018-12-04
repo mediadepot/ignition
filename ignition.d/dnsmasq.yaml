@@ -22,7 +22,7 @@ systemd:
       ExecStartPre=-/usr/bin/docker kill %n
       ExecStartPre=-/usr/bin/docker rm %n
       ExecStartPre=-/usr/bin/docker pull andyshinn/dnsmasq:2.75
-      ExecStart=/usr/bin/docker run --rm --name %n --network=host --cap-add=NET_ADMIN andyshinn/dnsmasq:2.75 --log-queries --log-facility=- --bogus-priv --domain-needed --local-service --local=/depot.lan/ --listen-address=127.0.0.1 --listen-address=${DEPOT_SERVER_IP} --address /depot.lan/${DEPOT_SERVER_IP}
+      ExecStart=/usr/bin/docker run --rm --name %n --network=host --dns=8.8.8.8 --dns=8.8.4.4 --cap-add=NET_ADMIN andyshinn/dnsmasq:2.75 --log-queries --log-facility=- --bogus-priv --domain-needed --local-service --local=/depot.lan/ --listen-address=127.0.0.1 --listen-address=${DEPOT_SERVER_IP} --address /depot.lan/${DEPOT_SERVER_IP}
       ExecStop=/usr/bin/docker stop -t 30 %n
 
       [Install]
