@@ -9,6 +9,24 @@ passwd:
     gid: 15000
     system: false
 storage:
+  files:
+  - filesystem: root
+    path: "/opt/mediadepot/bootstrap/depot-env.sh"
+    mode: 493 #755
+    contents:
+      local: depot-env.sh
+
+  - filesystem: root
+    path: "/etc/systemd/system/docker.service.d/block-docker.conf"
+    mode: 493 #755
+    contents:
+      inline: |-
+        # block docker.service until environmental variable files have been created.
+        [Unit]
+        After=depot-env.service
+        Requires=depot-env.service
+
+
   directories:
   - filesystem: root
     mode: 493 #755
@@ -20,4 +38,20 @@ storage:
   - filesystem: root
     mode: 493
     path: "/opt/mediadepot/bootstrap/"
-systemd: {}
+systemd:
+  - name: depot-env.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Generate Depot Environmental Files
+      After=network-online.target
+      Requires=network-online.target
+
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/mediadepot/bootstrap/depot-env.sh
+      RemainAfterExit=true
+      StandardOutput=journal
+
+      [Install]
+      WantedBy=multi-user.target

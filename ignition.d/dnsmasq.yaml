@@ -4,13 +4,7 @@ ignition:
   timeouts: {}
 networkd: {}
 passwd: {}
-storage:
-  files:
-  - filesystem: root
-    path: "/opt/mediadepot/bootstrap/dnsmasq.sh"
-    mode: 493 #755
-    contents:
-      local: dnsmasq.sh
+storage: {}
 systemd:
   units:
   - name: dnsmasq.service
@@ -18,16 +12,17 @@ systemd:
     contents: |
       [Unit]
       Description=Dnsmasq Container
-      After=docker.service network-online.target
-      Requires=docker.service network-online.target
+      After=docker.service depot-env.service
+      Requires=docker.service depot-env.service
 
       [Service]
+      EnvironmentFile=-/etc/sysconfig/mediadepot
       TimeoutStartSec=0
       Restart=always
       ExecStartPre=-/usr/bin/docker kill %n
       ExecStartPre=-/usr/bin/docker rm %n
       ExecStartPre=-/usr/bin/docker pull andyshinn/dnsmasq:2.75
-      ExecStart=/opt/mediadepot/bootstrap/dnsmasq.sh %n
+      ExecStart=/usr/bin/docker run --rm --name %n --network=host --cap-add=NET_ADMIN andyshinn/dnsmasq:2.75 --log-queries --log-facility=- --bogus-priv --domain-needed --local-service --local=/depot.lan/ --listen-address=127.0.0.1 --listen-address=${DEPOT_SERVER_IP} --address /depot.lan/${DEPOT_SERVER_IP}
       ExecStop=/usr/bin/docker stop -t 30 %n
 
       [Install]
