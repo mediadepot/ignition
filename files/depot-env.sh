@@ -6,6 +6,7 @@ DEPOT_SERVER_IP=${IP_ADDRESS}
 EOL
 
 
+#TODO: check if file exists first before restarting service.
 cat >/etc/systemd/system/docker.service.d/docker-opts.conf <<EOL
 [Service]
 Environment="DOCKER_OPTS=--dns=${IP_ADDRESS}"
