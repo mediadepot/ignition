@@ -30,3 +30,4 @@ systemd:
 
       [Install]
       WantedBy=multi-user.target
+      WantedBy=docker.service
