@@ -22,7 +22,7 @@ systemd:
       ExecStartPre=-/usr/bin/docker kill %n
       ExecStartPre=-/usr/bin/docker rm %n
       ExecStartPre=-/usr/bin/docker pull netdata/netdata
-      ExecStart=/usr/bin/docker run --rm --hostname %n --name %n -v /proc:/host/proc:ro -v /sys:/host/sys:ro -v /var/run/docker.sock:/var/run/docker.sock:ro --cap-add SYS_PTRACE --security-opt apparmor=unconfined --env PGID=$(DOCKER_GROUP_ID) --label traefik.enable=true --label traefik.port=19999 --label traefik.frontend.rule=Host:status.depot.lan netdata/netdata
+      ExecStart=/usr/bin/docker run --rm --hostname %n --name %n -v /proc:/host/proc:ro -v /sys:/host/sys:ro -v /var/run/docker.sock:/var/run/docker.sock:ro --cap-add SYS_PTRACE --security-opt apparmor=unconfined --env PGID=${DOCKER_GROUP_ID} --label traefik.enable=true --label traefik.port=19999 --label traefik.frontend.rule=Host:status.depot.lan netdata/netdata
       ExecStop=/usr/bin/docker stop -t 15 %n
 
       [Install]
