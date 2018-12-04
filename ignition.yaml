@@ -10,6 +10,7 @@ ignition:
     - source: https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json
     - source: https://mediadepot.github.io/ignition/ignition.d/notifications.json
     - source: https://mediadepot.github.io/ignition/ignition.d/smartmontools.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/netdata.json
   timeouts: {}
 networkd: {}
 passwd:
