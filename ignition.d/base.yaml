@@ -39,6 +39,7 @@ storage:
     mode: 493
     path: "/opt/mediadepot/bootstrap/"
 systemd:
+  units:
   - name: depot-env.service
     enabled: true
     contents: |-
