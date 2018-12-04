@@ -62,6 +62,13 @@ storage:
         After = mnt-drive1.mount
         After = mnt-drive2.mount
   - filesystem: root
+    path: "/etc/systemd/system/depot-filesystem.service.d/folders.conf"
+    mode: 420 #644
+    contents:
+      inline: |
+        [Service]
+        Environment="MEDIA_FOLDERS=documents ebooks movies music photos software tvshows"
+  - filesystem: root
     path: "/opt/mediadepot/smartmontools/smartd.conf"
     mode: 420 #644
     contents:
