@@ -32,13 +32,6 @@ storage:
       id: 15000
     group:
       id: 15000
-  - filesystem: root
-    mode: 493 #755
-    path: "/media/temp/"
-    user:
-      id: 15000
-    group:
-      id: 15000
 systemd:
   units:
   - name: usr-sbin.mount
