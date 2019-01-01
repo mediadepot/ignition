@@ -15,7 +15,25 @@ storage:
     mode: 493 #755
     contents:
       local: depot-env.sh
+  - filesystem: root
+    path: "/etc/systemd/system/media-storage.mount.d/base.conf"
+    mode: 420 #644
+    contents:
+      inline: |
+        [Unit]
+        Requires = media-temp.mount
+        After = media-temp.mount
   directories:
+  # the /media directory is a tmpfs file system, so lets create a /media/temp directory thats bind mounted to the /mnt/temp
+  # folder that's on the actual OS disk
+  - filesystem: root
+    mode: 493 #755
+    path: "/mnt/temp/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+
   - filesystem: root
     mode: 493 #755
     path: "/opt/mediadepot/apps/"
@@ -34,6 +52,17 @@ storage:
     path: "/etc/systemd/system/docker.service.d/"
 systemd:
   units:
+  - name: media-temp.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/mnt/temp
+      Where=/media/temp
+      Type=none
+      Options=bind
+
+      [Install]
+      WantedBy=local-fs.target
   - name: depot-env.service
     enabled: true
     contents: |-

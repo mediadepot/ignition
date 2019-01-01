@@ -80,7 +80,7 @@ storage:
         pushover_user_key: pushover1234
 
   - filesystem: root
-    path: "/etc/systemd/system/media-storage.mount.d/overrides.conf"
+    path: "/etc/systemd/system/media-storage.mount.d/deps.conf"
     mode: 420 #644
     contents:
       inline: |
