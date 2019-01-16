@@ -118,12 +118,15 @@ storage:
         #
         # S/../.././02 | schedule a short Self-Test between 2-3 am every morning
         # L/../../6/03 | schedule a long Self-Test between 3-4 am every Saturday morning
-        /dev/disk/by-uuid/988cc439-03f4-4c86-8383-10280783345d -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
-        /dev/disk/by-uuid/ed9df9d9-0458-48ed-9b87-e3e84b41382c -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
-        /dev/disk/by-uuid/6dfb654e-9d71-4398-b326-49ce78f6a302 -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
-        /dev/disk/by-uuid/fc684dcc-aa2f-44f3-a958-d302dc7dd46d -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
-        /dev/disk/by-uuid/cc8e3a78-99e0-44db-b970-29038626ed5e -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
-        /dev/disk/by-uuid/96809924-7aae-4725-91fa-d32273453d37 -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+
+        # unfortunatley you cant use /dev/disk/by-uuid/988cc439-03f4-4c86-8383-10280783345d when mounting devices into a container, so we're stuck with /dev/sda, sdb, etc.
+        /dev/sda -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdb -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdc -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdd -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sde -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdf -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+        /dev/sdg -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
 
 systemd:
   units:
