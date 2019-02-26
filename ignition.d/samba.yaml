@@ -29,7 +29,7 @@ systemd:
       ExecStartPre=-/usr/bin/docker kill %n
       ExecStartPre=-/usr/bin/docker rm %n
       ExecStartPre=-/usr/bin/docker pull mediadepot/samba
-      ExecStart=/usr/bin/docker run --rm --name %n -p 139:139 -p 445:445 -v /opt/mediadepot/apps/samba:/config -v /media:/media -e SAMBA_USERNAME=depot -e SAMBA_PASSWORD=badpass mediadepot/samba
+      ExecStart=/usr/bin/docker run --rm --name %n -p 139:139 -p 445:445 -v /opt/mediadepot/apps/samba:/config -v /media:/media -e SAMBA_USERNAME=depot -e SAMBA_PASSWORD=badpass mediadepot/samba -t "America/Los_Angeles"
       ExecStop=/usr/bin/docker stop -t 30 %n
 
       [Install]
