@@ -1,0 +1,39 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  files:
+  - filesystem: root
+    path: "/opt/mediadepot/bootstrap/update-motd.sh"
+    mode: 493 #755
+    contents:
+      local: update-motd.sh
+  directories:
+  - filesystem: root
+    mode: 493 #755
+    path: "/etc/update-motd.d"
+systemd:
+  units:
+  - name: motd.service
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Updates /run/coreos/motd with dynamic content from scripts in /etc/update-motd.d
+
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/mediadepot/bootstrap/update-motd.sh
+  - name: motd.timer
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Run motd.service every 10 minutes
+
+      [Timer]
+      OnCalendar=*:0/10
+
+      [Install]
+      WantedBy=multi-user.target

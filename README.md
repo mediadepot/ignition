@@ -9,7 +9,8 @@
 - A lightweight docker management system (Portainer) with customized templates for popular media-center applications
 - Samba (SMB) shares automatically served from JBOD disk.
 - Hard Disk montoring that uses S.M.A.R.T disk status to notify you if disks become unhealthy.
-
+- NVIDIA driver installation (optional)
+- MOTD dropins.
 
 # Usage
 
