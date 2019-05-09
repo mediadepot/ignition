@@ -1,15 +1,52 @@
 ---
+# This is the main CoreOS Ignition file for "installing" Mediadepot.
+# It contains configuration that should be customized for each installation (SSH keys, Disk drives, etc.)
+# All other configuration is stored in the ignition.d directory and loaded as modules.
+# These configuration files are heavily commented for ease of use
+#
+# Ignition configuration files are written in YAML, following the syntax shown here:
+#   https://github.com/coreos/container-linux-config-transpiler/blob/master/doc/configuration.md
+# The Ignition YAML files are then "transpiled" to JSON using the CoreOS Configuration Transpiler:
+#   https://github.com/coreos/container-linux-config-transpiler
+#
+
 ignition:
   config:
     append:
+    # (Required) The base.json config prepares the filesystem and sets up disk mounting service.
     - source: https://mediadepot.github.io/ignition/ignition.d/base.json
+
+    # (Required) The mergerfs.json config installs the mergerfs binary and sets up the automation friendly folder structure
     - source: https://mediadepot.github.io/ignition/ignition.d/mergerfs.json
-    - source: https://mediadepot.github.io/ignition/ignition.d/samba.json
+
+    # (Required) The portainer.json config installs a Portainer service, which manages a Docker container.
+    # Portainer is used for managing docker containers via a Web UI.
     - source: https://mediadepot.github.io/ignition/ignition.d/portainer.json
+
+    # (Required) The traefik.json config installs a Traefik service, which manages a Docker container.
+    # Traefik is used to automatically provide a easy-to-remember hostname for each docker container.
+    # eg. sickrage.depot.lan or home.depot.lan
     - source: https://mediadepot.github.io/ignition/ignition.d/traefik.json
+
+    # (Optional) The dnsmasq.json config installs a Dnsmasq service, which manages a Docker container.
+    # DNSMasq is a light-weight DNS server configured to route all *.depot.lan requests to the traefik container.
+    # All other requests are routed via Google DNS. This means you can configure your other computers to use
+    # DNSMasq as your primary DNS and access the internet and the services running on your Mediadepot server, without any issues.
     - source: https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json
+
+    # (Optional) The samba.json config installs a Samba service, which manages a Docker container.
+    # Samba exposes the storage folder structure as network shares
+    - source: https://mediadepot.github.io/ignition/ignition.d/samba.json
+
+    # (Optional) The notifications.json config sets up a configuration file for enabling PushOver notifications (used by SmartMonTools)
     - source: https://mediadepot.github.io/ignition/ignition.d/notifications.json
+
+    # (Optional) The smartmontools.json installs a SmartMonTools service, which manages a Docker container.
+    # SmartMonTools tracks the S.M.A.R.T. health status of your disk drives and notifies you if your disk health changes.
     - source: https://mediadepot.github.io/ignition/ignition.d/smartmontools.json
+
+    # (Optional) The netdata.json installs a NetData service, which manages a Docker container.
+    # Netdata is a lightweight metric logging service that shows you the current utilization of your server (CPU, RAM, Storage, etc)
     - source: https://mediadepot.github.io/ignition/ignition.d/netdata.json
   timeouts: {}
 networkd: {}
