@@ -26,6 +26,9 @@ systemd:
       [Service]
       Type=oneshot
       ExecStart=/opt/mediadepot/bootstrap/update-motd.sh
+
+      [Install]
+      WantedBy=multi-user.target
   - name: motd.timer
     enabled: true
     contents: |-
