@@ -50,6 +50,14 @@ ignition:
     - source: https://mediadepot.github.io/ignition/ignition.d/netdata.json
   timeouts: {}
 networkd: {}
+
+# (Required) The users defined in this section are required (core & depot).
+# `core` is the default user for the CoreOS installation.
+# It's the user you will use for making changes as root, via sudo.
+#
+# `depot` is a limited user account, which owns all of your media files. It's uid/gid must be 15000.
+#
+# You should change the ssh_authorized_keys for both users to a key under your control.
 passwd:
   users:
   - name: core
@@ -63,6 +71,9 @@ passwd:
     ssh_authorized_keys:
     - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs=
     shell: "/bin/bash"
+
+# (Required) The directories referenced in this storage block (/mnt/drive*) should be changed to match the number of storage drives on your server
+# The UID and GID should be set to 15000
 storage:
   directories:
   - filesystem: root
@@ -108,14 +119,8 @@ storage:
     group:
       id: 15000
   files:
-  - filesystem: root
-    path: "/etc/default/mediadepot/notify.yaml"
-    mode: 384 #600
-    contents:
-      inline: |
-        ---
-        pushover_user_key: pushover1234
-
+  # (Required) The media-storage mount service is required. It ensures that the disks are correctly mounted before mergerfs starts and mounts its JBOD drive.
+  # The `mnt-*` entries must match the storage directories created above.
   - filesystem: root
     path: "/etc/systemd/system/media-storage.mount.d/deps.conf"
     mode: 420 #644
@@ -141,6 +146,8 @@ storage:
       inline: |
         [Service]
         Environment="MEDIA_FOLDERS=documents ebooks movies music photos software tvshows"
+
+  # (Optional) This configuration file is used by smartmontools to specify which drives to actually watch for failures.
   - filesystem: root
     path: "/opt/mediadepot/smartmontools/smartd.conf"
     mode: 420 #644
@@ -164,7 +171,17 @@ storage:
         /dev/sde -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
         /dev/sdf -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
         /dev/sdg -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
+  # (Optional) The notify.yaml config file is used for specifying your pushover API key, which is used by smartmontools disk monitoring.
+  - filesystem: root
+    path: "/etc/default/mediadepot/notify.yaml"
+    mode: 384 #600
+    contents:
+      inline: |
+        ---
+        pushover_user_key: pushover1234
 
+# (Required) These systemd services tell CoreOS to mount the specified HD's to the previously created folders.
+# HD's are referenced by UUID as they are static and do not change (even across motherboard upgrades/OS changes).
 systemd:
   units:
   - name: mnt-drive1.mount
