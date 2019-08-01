@@ -7,7 +7,7 @@ passwd: {}
 storage:
   files:
   - filesystem: root
-    path: "/opt/sbin/mergerfs"
+    path: "/opt/overlay/sbin/mergerfs"
     mode: 493 #755
     contents:
       remote:
@@ -19,12 +19,12 @@ storage:
       local: filesystem.sh
   links:
   - filesystem: root
-    path: "/opt/sbin/mount.mergerfs"
-    target: "/opt/sbin/mergerfs"
+    path: "/opt/overlay/sbin/mount.mergerfs"
+    target: "/opt/overlay/sbin/mergerfs"
   directories:
   - filesystem: root
     mode: 493 #755
-    path: "/opt/mediadepot/bootstrap/sbin.workdir/"
+    path: "/opt/overlay/sbin.wd/"
   - filesystem: root
     mode: 493 #755
     path: "/media/storage/"
@@ -40,13 +40,13 @@ systemd:
       [Unit]
       Description=Overlay mount /usr/sbin mount
       Before=local-fs.target
-      ConditionPathExists=/opt/sbin
+      ConditionPathExists=/opt/overlay/sbin
 
       [Mount]
       Type=overlay
       What=overlay
       Where=/usr/sbin
-      Options=lowerdir=/usr/sbin,upperdir=/opt/sbin,workdir=/opt/mediadepot/bootstrap/sbin.workdir
+      Options=lowerdir=/usr/sbin,upperdir=/opt/overlay/sbin,workdir=/opt/overlay/sbin.wd
 
       [Install]
       WantedBy=local-fs.target

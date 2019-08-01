@@ -49,7 +49,16 @@ storage:
       id: 15000
   - filesystem: root
     mode: 493
-    path: "/opt/mediadepot/bootstrap/"
+    path: "/opt/bootstrap/"
+  - filesystem: root
+    mode: 493
+    path: "/opt/overlay/"
+  - filesystem: root
+    mode: 493
+    path: "/opt/overlay/bin"
+  - filesystem: root
+    mode: 493
+    path: "/opt/overlay/bin.wd"
   - filesystem: root
     mode: 493
     path: "/etc/sysconfig/"
@@ -85,3 +94,19 @@ systemd:
 
       [Install]
       WantedBy=multi-user.target
+    - name: usr-bin.mount
+      enabled: true
+      contents: |-
+        [Unit]
+        Description=Overlay mount /usr/bin mount
+        Before=local-fs.target
+        ConditionPathExists=/opt/overlay/bin
+
+        [Mount]
+        Type=overlay
+        What=overlay
+        Where=/usr/bin
+        Options=lowerdir=/usr/bin,upperdir=/opt/overlay/bin,workdir=/opt/overlay/bin.wd
+
+        [Install]
+        WantedBy=local-fs.target
