@@ -94,19 +94,19 @@ systemd:
 
       [Install]
       WantedBy=multi-user.target
-    - name: usr-bin.mount
-      enabled: true
-      contents: |-
-        [Unit]
-        Description=Overlay mount /usr/bin mount
-        Before=local-fs.target
-        ConditionPathExists=/opt/overlay/bin
+  - name: usr-bin.mount
+    enabled: true
+    contents: |-
+      [Unit]
+      Description=Overlay mount /usr/bin mount
+      Before=local-fs.target
+      ConditionPathExists=/opt/overlay/bin
 
-        [Mount]
-        Type=overlay
-        What=overlay
-        Where=/usr/bin
-        Options=lowerdir=/usr/bin,upperdir=/opt/overlay/bin,workdir=/opt/overlay/bin.wd
+      [Mount]
+      Type=overlay
+      What=overlay
+      Where=/usr/bin
+      Options=lowerdir=/usr/bin,upperdir=/opt/overlay/bin,workdir=/opt/overlay/bin.wd
 
-        [Install]
-        WantedBy=local-fs.target
+      [Install]
+      WantedBy=local-fs.target

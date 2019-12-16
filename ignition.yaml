@@ -38,7 +38,7 @@ ignition:
     # Samba exposes the storage folder structure as network shares
     - source: https://mediadepot.github.io/ignition/ignition.d/samba.json
 
-    # (Optional) The notifications.json config sets up a configuration file for enabling PushOver notifications (used by SmartMonTools)
+    # (Optional) The notifications.json config sets up a configuration file for enabling PushOver notifications (used by SmartMonTools & System Startup/Shutdown notifications)
     - source: https://mediadepot.github.io/ignition/ignition.d/notifications.json
 
     # (Optional) The smartmontools.json installs a SmartMonTools service, which manages a Docker container.
