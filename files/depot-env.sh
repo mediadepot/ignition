@@ -17,6 +17,10 @@ cat >/etc/systemd/system/docker.service.d/docker-opts.conf <<EOL
 Environment="DOCKER_OPTS=--dns=${IP_ADDRESS}"
 EOL
 
+# create a traefik network if it does not already exist
+docker network create traefik || echo "network already exists, ignoring"
+
 # restart Docker Daemon after changing opts.
 systemctl daemon-reload
 systemctl restart docker.service
+

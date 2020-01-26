@@ -23,6 +23,12 @@ storage:
         [Unit]
         Requires = media-temp.mount
         After = media-temp.mount
+  - filesystem: root
+    path: "/opt/overlay/bin/docker-compose"
+    mode: 493 #755
+    contents:
+      remote:
+        url: https://mediadepot.github.io/ignition/opt/bin/docker-compose-1.23.2
   directories:
   # the /media directory is a tmpfs file system, so lets create a /media/temp directory thats bind mounted to the /mnt/temp
   # folder that's on the actual OS disk
@@ -43,6 +49,13 @@ storage:
   - filesystem: root
     mode: 493 #755
     path: "/opt/mediadepot/apps/"
+    user:
+      id: 15000
+    group:
+      id: 15000
+  - filesystem: root
+    mode: 493 #755
+    path: "/opt/mediadepot/systemd/"
     user:
       id: 15000
     group:

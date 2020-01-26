@@ -5,6 +5,34 @@ ignition:
 networkd: {}
 passwd: {}
 storage:
+  files:
+    - filesystem: root
+      path: "/opt/mediadepot/systemd/portainer/docker-compose.yml"
+      mode: 493 #755
+      contents:
+        inline: |-
+          version: '2'
+          services:
+            portainer:
+              image: portainer/portainer
+              volumes:
+                - '/opt/mediadepot/portainer:/data'
+                - '/var/run/docker.sock:/var/run/docker.sock'
+              ports:
+                - 9000:9000
+              labels:
+                - 'traefik.enable=true'
+                - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
+                - 'traefik.http.routers.portainer.rule=Host(`admin.depot.lan`)'
+              command:
+                - --no-analytics
+                - --templates=https://mediadepot.github.io/templates/portainer.json
+                - --host=unix:///var/run/docker.sock
+              networks:
+                - traefik
+          networks:
+            traefik:
+              external: true
   directories:
   - filesystem: root
     mode: 493 #755
@@ -16,17 +44,20 @@ systemd:
     contents: |-
       [Unit]
       Description=Portainer Admin Container
-      After=docker.service
-      Requires=docker.service
+      After=docker.service depot-env.service
+      Requires=docker.service depot-env.service
 
       [Service]
+      Restart=always
+      EnvironmentFile=-/etc/sysconfig/mediadepot
       TimeoutStartSec=0
       Restart=always
-      ExecStartPre=-/usr/bin/docker kill %n
-      ExecStartPre=-/usr/bin/docker rm %n
-      ExecStartPre=-/usr/bin/docker pull portainer/portainer
-      ExecStart=/usr/bin/docker run --rm --name %n -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v /opt/mediadepot/portainer:/data --label traefik.enable=true --label traefik.port=9000 --label traefik.frontend.rule=Host:admin.depot.lan portainer/portainer --no-analytics --templates=https://mediadepot.github.io/templates/portainer.json  --host=unix:///var/run/docker.sock
-      ExecStop=/usr/bin/docker stop -t 15 %n
+      WorkingDirectory=/opt/mediadepot/systemd/portainer/
+      ExecStartPre=-/usr/bin/docker-compose down -v
+      ExecStartPre=-/usr/bin/docker-compose rm -v
+      ExecStartPre=-/usr/bin/docker-compose pull
+      ExecStart=/usr/bin/docker-compose up
+      ExecStop=/usr/bin/docker-compose down -v
 
       [Install]
       WantedBy=multi-user.target

@@ -4,7 +4,34 @@ ignition:
   timeouts: {}
 networkd: {}
 passwd: {}
-storage: {}
+storage:
+  files:
+    - filesystem: root
+      path: "/opt/mediadepot/systemd/dnsmasq/docker-compose.yml"
+      mode: 493 #755
+      contents:
+        inline: |-
+          version: '2'
+          services:
+            dnsmasq:
+              image: 'andyshinn/dnsmasq:2.75'
+              network_mode: host
+              cap_add:
+                - NET_ADMIN
+              dns:
+                - 8.8.8.8
+                - 8.8.4.4
+              command:
+                - --log-queries
+                - --log-facility=-
+                - --bogus-priv
+                - --domain-needed
+                - --local-service
+                - --local=/depot.lan/
+                - --listen-address=127.0.0.1
+                - --listen-address=${DEPOT_SERVER_IP}
+                - --address
+                - /depot.lan/${DEPOT_SERVER_IP}
 systemd:
   units:
   - name: dnsmasq.service
@@ -16,14 +43,16 @@ systemd:
       Requires=docker.service depot-env.service
 
       [Service]
+      Restart=always
       EnvironmentFile=-/etc/sysconfig/mediadepot
       TimeoutStartSec=0
       Restart=always
-      ExecStartPre=-/usr/bin/docker kill %n
-      ExecStartPre=-/usr/bin/docker rm %n
-      ExecStartPre=-/usr/bin/docker pull andyshinn/dnsmasq:2.75
-      ExecStart=/usr/bin/docker run --rm --name %n --network=host --dns=8.8.8.8 --dns=8.8.4.4 --cap-add=NET_ADMIN andyshinn/dnsmasq:2.75 --log-queries --log-facility=- --bogus-priv --domain-needed --local-service --local=/depot.lan/ --listen-address=127.0.0.1 --listen-address=${DEPOT_SERVER_IP} --address /depot.lan/${DEPOT_SERVER_IP}
-      ExecStop=/usr/bin/docker stop -t 30 %n
+      WorkingDirectory=/opt/mediadepot/systemd/dnsmasq/
+      ExecStartPre=-/usr/bin/docker-compose down -v
+      ExecStartPre=-/usr/bin/docker-compose rm -v
+      ExecStartPre=-/usr/bin/docker-compose pull
+      ExecStart=/usr/bin/docker-compose up
+      ExecStop=/usr/bin/docker-compose down -v
 
       [Install]
       WantedBy=multi-user.target
