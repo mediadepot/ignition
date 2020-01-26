@@ -28,6 +28,7 @@ storage:
                 - --providers.docker.exposedByDefault=false
                 - --providers.docker.network=traefik
                 - --entrypoints.web.address=:80
+                - '--providers.docker.defaultRule=Host(`{{ normalize .Name }}.depot.lan`)'
               networks:
                 - traefik
           networks:
