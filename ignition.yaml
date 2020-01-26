@@ -41,9 +41,9 @@ ignition:
     # (Optional) The notifications.json config sets up a configuration file for enabling PushOver notifications (used by SmartMonTools & System Startup/Shutdown notifications)
     - source: https://mediadepot.github.io/ignition/ignition.d/notifications.json
 
-    # (Optional) The smartmontools.json installs a SmartMonTools service, which manages a Docker container.
+    # (Optional) The fs-monitor.json installs a SmartMonTools service, which manages a Docker container.
     # SmartMonTools tracks the S.M.A.R.T. health status of your disk drives and notifies you if your disk health changes.
-    - source: https://mediadepot.github.io/ignition/ignition.d/smartmontools.json
+    - source: https://mediadepot.github.io/ignition/ignition.d/fs-monitor.json
 
     # (Optional) The netdata.json installs a NetData service, which manages a Docker container.
     # Netdata is a lightweight metric logging service that shows you the current utilization of your server (CPU, RAM, Storage, etc)
@@ -149,7 +149,7 @@ storage:
 
   # (Optional) This configuration file is used by smartmontools to specify which drives to actually watch for failures.
   - filesystem: root
-    path: "/opt/mediadepot/smartmontools/smartd.conf"
+    path: "/opt/mediadepot/fs-monitor/config/smartd.conf"
     mode: 420 #644
     contents:
       inline: |
@@ -171,14 +171,6 @@ storage:
         /dev/sde -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
         /dev/sdf -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
         /dev/sdg -a -o on -S on -s (S/../.././02|L/../../6/03) -m @ALL -M exec /etc/smartd_warning.sh
-  # (Optional) The notify.yaml config file is used for specifying your pushover API key, which is used by smartmontools disk monitoring.
-  - filesystem: root
-    path: "/etc/default/mediadepot/notify.yaml"
-    mode: 384 #600
-    contents:
-      inline: |
-        ---
-        pushover_user_key: pushover1234
 
 # (Required) These systemd services tell CoreOS to mount the specified HD's to the previously created folders.
 # HD's are referenced by UUID as they are static and do not change (even across motherboard upgrades/OS changes).

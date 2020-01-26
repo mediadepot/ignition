@@ -7,31 +7,26 @@ passwd: {}
 storage:
   files:
     - filesystem: root
-      path: "/opt/mediadepot/systemd/smartmontools/docker-compose.yml"
+      path: "/opt/mediadepot/systemd/fs-monitor/docker-compose.yml"
       mode: 493 #755
       contents:
         inline: |-
           version: '2'
           services:
-            smartmontools:
-              image: mediadepot/smartmontools
+            fs-monitor:
+              image: mediadepot/fs-monitor
               volumes:
-                - '/opt/mediadepot/smartmontools/smartd.conf:/etc/smartd.conf:ro'
-                - '/opt/mediadepot/smartmontools/smartd_warning.d/:/etc/smartd_warning.d/'
-                - '/etc/default/mediadepot/notify.yaml:/etc/default/mediadepot/notify.yaml'
+                - '/opt/mediadepot/fs-monitor/config/smartd.conf:/etc/smartd.conf:ro'
+                - '/opt/mediadepot/fs-monitor/data/:/srv/fs-monitor/'
               privileged: true
 
-  directories:
-  - filesystem: root
-    mode: 493 #755
-    path: "/opt/mediadepot/smartmontools/smartd_warning.d"
 systemd:
   units:
-  - name: smartmontools.service
+  - name: fs-monitor.service
     enabled: true
     contents: |-
       [Unit]
-      Description=Smartmontools Container
+      Description=Filesystem Monitor Container
       After=docker.service depot-env.service
       Requires=docker.service depot-env.service
 
@@ -40,7 +35,7 @@ systemd:
       EnvironmentFile=-/etc/sysconfig/mediadepot
       TimeoutStartSec=0
       Restart=always
-      WorkingDirectory=/opt/mediadepot/systemd/smartmontools/
+      WorkingDirectory=/opt/mediadepot/systemd/fs-monitor/
       ExecStartPre=-/usr/bin/docker-compose down -v
       ExecStartPre=-/usr/bin/docker-compose rm -v
       ExecStartPre=-/usr/bin/docker-compose pull
