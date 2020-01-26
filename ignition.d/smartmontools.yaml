@@ -5,6 +5,22 @@ ignition:
 networkd: {}
 passwd: {}
 storage:
+  files:
+    - filesystem: root
+      path: "/opt/mediadepot/systemd/smartmontools/docker-compose.yml"
+      mode: 493 #755
+      contents:
+        inline: |-
+          version: '2'
+          services:
+            smartmontools:
+              image: mediadepot/smartmontools
+              volumes:
+                - '/opt/mediadepot/smartmontools/smartd.conf:/etc/smartd.conf:ro'
+                - '/opt/mediadepot/smartmontools/smartd_warning.d/:/etc/smartd_warning.d/'
+                - '/etc/default/mediadepot/notify.yaml:/etc/default/mediadepot/notify.yaml'
+              privileged: true
+
   directories:
   - filesystem: root
     mode: 493 #755
@@ -16,18 +32,22 @@ systemd:
     contents: |-
       [Unit]
       Description=Smartmontools Container
-      After=docker.service
-      Requires=docker.service
+      After=docker.service depot-env.service
+      Requires=docker.service depot-env.service
 
       [Service]
+      Restart=always
+      EnvironmentFile=-/etc/sysconfig/mediadepot
       TimeoutStartSec=0
       Restart=always
-      ExecStartPre=-/usr/bin/docker kill %n
-      ExecStartPre=-/usr/bin/docker rm %n
-      ExecStartPre=-/usr/bin/docker pull mediadepot/smartmontools
-      ExecStart=/usr/bin/docker run --rm --name %n -v /opt/mediadepot/smartmontools/smartd.conf:/etc/smartd.conf:ro -v /opt/mediadepot/smartmontools/smartd_warning.d/:/etc/smartd_warning.d/ -v /etc/default/mediadepot/notify.yaml:/etc/default/mediadepot/notify.yaml --privileged mediadepot/smartmontools
-      ExecStop=/usr/bin/docker stop -t 15 %n
+      WorkingDirectory=/opt/mediadepot/systemd/smartmontools/
+      ExecStartPre=-/usr/bin/docker-compose down -v
+      ExecStartPre=-/usr/bin/docker-compose rm -v
+      ExecStartPre=-/usr/bin/docker-compose pull
+      ExecStart=/usr/bin/docker-compose up
+      ExecStop=/usr/bin/docker-compose down -v
 
       [Install]
       WantedBy=multi-user.target
       WantedBy=docker.service
+

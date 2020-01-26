@@ -5,6 +5,26 @@ ignition:
 networkd: {}
 passwd: {}
 storage:
+  files:
+    - filesystem: root
+      path: "/opt/mediadepot/systemd/samba/docker-compose.yml"
+      mode: 493 #755
+      contents:
+        inline: |-
+          version: '2'
+          services:
+            samba:
+              image: mediadepot/samba
+              volumes:
+                - '/opt/mediadepot/apps/samba:/config'
+                - '/media:/media'
+              environment:
+                - 'SAMBA_USERNAME=depot'
+                - 'SAMBA_PASSWORD=badpass'
+                - 'TZ=America/Los_Angeles'
+              ports:
+                - 139:139
+                - 445:445
   directories:
   - filesystem: root
     mode: 493 #755
@@ -20,17 +40,20 @@ systemd:
     contents: |-
       [Unit]
       Description=Samba Container
-      After=docker.service depot-filesystem.service media-storage.mount
-      Requires=docker.service depot-filesystem.service media-storage.mount
+      After=docker.service depot-env.service
+      Requires=docker.service depot-env.service
 
       [Service]
+      Restart=always
+      EnvironmentFile=-/etc/sysconfig/mediadepot
       TimeoutStartSec=0
       Restart=always
-      ExecStartPre=-/usr/bin/docker kill %n
-      ExecStartPre=-/usr/bin/docker rm %n
-      ExecStartPre=-/usr/bin/docker pull mediadepot/samba
-      ExecStart=/usr/bin/docker run --rm --name %n -p 139:139 -p 445:445 -v /opt/mediadepot/apps/samba:/config -v /media:/media -e SAMBA_USERNAME=depot -e SAMBA_PASSWORD=badpass mediadepot/samba -t "America/Los_Angeles"
-      ExecStop=/usr/bin/docker stop -t 30 %n
+      WorkingDirectory=/opt/mediadepot/systemd/samba/
+      ExecStartPre=-/usr/bin/docker-compose down -v
+      ExecStartPre=-/usr/bin/docker-compose rm -v
+      ExecStartPre=-/usr/bin/docker-compose pull
+      ExecStart=/usr/bin/docker-compose up
+      ExecStop=/usr/bin/docker-compose down -v
 
       [Install]
       WantedBy=multi-user.target
