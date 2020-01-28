@@ -2,7 +2,7 @@
 
 # Features
 - Consistent UserID/GroupID across all containers so that permissions are always correct
-- A DNS service that resolves containers with a nice hostname `*.depot.lan` from other computers on your home network, and for container to container communication
+- A DNS service that resolves containers with a nice (real) hostname `*.depot.lan` from other computers on your home network, and for container to container communication
 - A JBOD disk management system with minimal configuration, and fully transparent recovery/failure. MergerFS acts like a simple file proxy, and removed disks can be read on other computers with no additional tooling
 - Ensure that virtual/JBOD disk is correctly mounted before allowing dependent programs/containers to start up.
 - A lightweight status dashboard for checking system metrics

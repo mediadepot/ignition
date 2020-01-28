@@ -146,7 +146,13 @@ storage:
       inline: |
         [Service]
         Environment="MEDIA_FOLDERS=documents ebooks movies music photos software tvshows"
-
+  - filesystem: root
+    path: "/etc/systemd/system/depot-env.service.d/domain.conf"
+    mode: 420 #644
+    contents:
+      inline: |
+        [Service]
+        Environment="DEPOT_DOMAIN_NAME=depot.lan"
   # (Optional) This configuration file is used by smartmontools to specify which drives to actually watch for failures.
   - filesystem: root
     path: "/opt/mediadepot/fs-monitor/config/smartd.conf"

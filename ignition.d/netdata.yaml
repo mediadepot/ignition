@@ -29,7 +29,7 @@ storage:
               labels:
                 - 'traefik.enable=true'
                 - 'traefik.http.services.netdata.loadbalancer.server.port=19999'
-                - 'traefik.http.routers.netdata.rule=Host(`status.depot.lan`)'
+                - 'traefik.http.routers.netdata.rule=Host(`status.${DEPOT_DOMAIN_NAME}`)'
               networks:
                 - traefik
           networks:

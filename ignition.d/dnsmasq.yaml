@@ -27,11 +27,11 @@ storage:
                 - --bogus-priv
                 - --domain-needed
                 - --local-service
-                - --local=/depot.lan/
+                - --local=/${DEPOT_DOMAIN_NAME}/
                 - --listen-address=127.0.0.1
                 - --listen-address=${DEPOT_SERVER_IP}
                 - --address
-                - /depot.lan/${DEPOT_SERVER_IP}
+                - /${DEPOT_DOMAIN_NAME}/${DEPOT_SERVER_IP}
 systemd:
   units:
   - name: dnsmasq.service

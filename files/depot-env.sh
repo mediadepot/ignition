@@ -8,6 +8,8 @@ DEPOT_SERVER_IP=${IP_ADDRESS}
 # Used by netdata
 DOCKER_GROUP_ID=$(id -g docker)
 
+# Depot domain namee
+DEPOT_DOMAIN_NAME=${DEPOT_DOMAIN_NAME}
 EOL
 
 
