@@ -24,6 +24,8 @@ storage:
                 - 'traefik.enable=true'
                 - 'traefik.http.services.authelia.loadbalancer.server.port=9091'
                 - 'traefik.http.routers.authelia.rule=Host(`login.${DEPOT_DOMAIN_NAME}`)'
+                - 'traefik.http.routers.authelia.entrypoints=websecure'
+                - 'traefik.http.routers.authelia.tls.certresolver=mydnschallenge'
               networks:
                 - traefik
           networks:

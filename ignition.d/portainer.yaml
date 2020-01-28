@@ -24,6 +24,8 @@ storage:
                 - 'traefik.enable=true'
                 - 'traefik.http.services.portainer.loadbalancer.server.port=9000'
                 - 'traefik.http.routers.portainer.rule=Host(`admin.${DEPOT_DOMAIN_NAME}`)'
+                - 'traefik.http.routers.portainer.entrypoints=websecure'
+                - 'traefik.http.routers.portainer.tls.certresolver=mydnschallenge'
               command:
                 - --no-analytics
                 - --templates=https://mediadepot.github.io/templates/portainer.json

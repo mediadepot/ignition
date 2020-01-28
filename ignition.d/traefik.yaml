@@ -18,17 +18,36 @@ storage:
               ports:
                 # The HTTP port
                 - "80:80"
+                # The HTTPS port
+                - "443:443"
                 # The Web UI (enabled by --api.insecure=true)
                 - "8080:8080"
               volumes:
                 - "/var/run/docker.sock:/var/run/docker.sock:ro"
+                - "/opt/mediadepot/traefik/letsencrypt:/letsencrypt"
               command:
                 - --api.insecure=true
                 - --providers.docker
                 - --providers.docker.exposedByDefault=false
                 - --providers.docker.network=traefik
                 - --entrypoints.web.address=:80
+                - --entrypoints.websecure.address=:443
                 - '--providers.docker.defaultRule=Host(`{{ normalize .Name }}.${DEPOT_DOMAIN_NAME}`)'
+                - "--certificatesresolvers.mydnschallenge.acme.dnschallenge=true"
+                - "--certificatesresolvers.mydnschallenge.acme.dnschallenge.provider=cloudflare"
+                - "--certificatesresolvers.mydnschallenge.acme.email=postmaster@${DEPOT_DOMAIN_NAME}"
+                - "--certificatesresolvers.mydnschallenge.acme.storage=/letsencrypt/acme.json"
+              labels:
+                # Force http to https redirects.
+                - traefik.enable=true
+                - traefik.http.routers.https-redirect.entrypoints=web
+                - traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)
+                - traefik.http.routers.https-redirect.middlewares=https-only
+                - traefik.http.middlewares.https-only.redirectscheme.scheme=https
+              # NOTE: for authentication you should create a new docker-compose.overrides.yml file and specify your environmental
+              # variables.
+              # environment:
+              #   - "CF_DNS_API_TOKEN=mytoken here"
               networks:
                 - traefik
           networks:

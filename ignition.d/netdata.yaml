@@ -30,6 +30,8 @@ storage:
                 - 'traefik.enable=true'
                 - 'traefik.http.services.netdata.loadbalancer.server.port=19999'
                 - 'traefik.http.routers.netdata.rule=Host(`status.${DEPOT_DOMAIN_NAME}`)'
+                - 'traefik.http.routers.netdata.entrypoints=websecure'
+                - 'traefik.http.routers.netdata.tls.certresolver=mydnschallenge'
               networks:
                 - traefik
           networks:
