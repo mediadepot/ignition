@@ -44,6 +44,11 @@ storage:
                 - traefik.http.routers.https-redirect.rule=HostRegexp(`{any:.*}`)
                 - traefik.http.routers.https-redirect.middlewares=https-only
                 - traefik.http.middlewares.https-only.redirectscheme.scheme=https
+
+                - 'traefik.http.routers.traefik.rule=Host(`traefik.${DEPOT_DOMAIN_NAME}`)'
+                - traefik.http.routers.traefik.entrypoints=websecure
+                - 'traefik.http.routers.traefik.service=api@internal'
+                - traefik.http.routers.traefik.tls.certresolver=mydnschallenge
               # NOTE: for authentication you should create a new docker-compose.overrides.yml file and specify your environmental
               # variables.
               # environment:
