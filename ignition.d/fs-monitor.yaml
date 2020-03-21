@@ -18,6 +18,8 @@ storage:
               volumes:
                 - '/opt/mediadepot/fs-monitor/config/smartd.conf:/etc/smartd.conf:ro'
                 - '/opt/mediadepot/fs-monitor/data/:/srv/fs-monitor/'
+                - '/media/:/media/'
+                - '/mnt/:/mnt/'
               privileged: true
 
 systemd:
