@@ -37,6 +37,7 @@ storage:
                 - "--certificatesresolvers.mydnschallenge.acme.dnschallenge.provider=cloudflare"
                 - "--certificatesresolvers.mydnschallenge.acme.email=postmaster@${DEPOT_DOMAIN_NAME}"
                 - "--certificatesresolvers.mydnschallenge.acme.storage=/letsencrypt/acme.json"
+                - "--serverstransport.forwardingtimeouts.idleconntimeout=10"
               labels:
                 # Force http to https redirects.
                 - traefik.enable=true
