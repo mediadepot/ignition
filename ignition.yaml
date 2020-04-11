@@ -186,7 +186,7 @@ systemd:
     enable: true
     contents: |-
       [Mount]
-      What=/dev/disk/by-uuid/988cc439-03f4-4c86-8383-10280783345d
+      What=/dev/disk/by-uuid/806cf4bc-d160-4d96-8ee9-3ab7cf2a2e1f
       Where=/mnt/drive1
       Type=ext4
 
@@ -196,7 +196,7 @@ systemd:
     enable: true
     contents: |-
       [Mount]
-      What=/dev/disk/by-uuid/ed9df9d9-0458-48ed-9b87-e3e84b41382c
+      What=/dev/disk/by-uuid/3a475599-9521-4a14-8e29-5b18a215193f
       Where=/mnt/drive2
       Type=ext4
 
@@ -226,7 +226,7 @@ systemd:
     enable: true
     contents: |-
       [Mount]
-      What=/dev/disk/by-uuid/cc8e3a78-99e0-44db-b970-29038626ed5e
+      What=/dev/disk/by-uuid/8125ec6d-a7e4-4950-ac84-72d6a4d67128
       Where=/mnt/drive5
       Type=ext4
 
