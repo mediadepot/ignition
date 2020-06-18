@@ -1,0 +1,34 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/systemd/netdata/docker-compose.yml",
+        "contents": {
+          "source": "data:,version%3A%20'2'%0Aservices%3A%0A%20%20netdata%3A%0A%20%20%20%20image%3A%20netdata%2Fnetdata%0A%20%20%20%20cap_add%3A%0A%20%20%20%20%20%20-%20SYS_PTRACE%0A%20%20%20%20security_opt%3A%0A%20%20%20%20%20%20-%20seccomp%3Aunconfined%0A%20%20%20%20%20%20-%20apparmor%3Aunconfined%0A%20%20%20%20volumes%3A%0A%20%20%20%20%20%20-%20'%2Fproc%3A%2Fhost%2Fproc%3Aro'%0A%20%20%20%20%20%20-%20'%2Fsys%3A%2Fhost%2Fsys%3Aro'%0A%20%20%20%20%20%20-%20'%2Fvar%2Frun%2Fdocker.sock%3A%2Fvar%2Frun%2Fdocker.sock%3Aro'%0A%20%20%20%20environment%3A%0A%20%20%20%20%20%20-%20'PGID%3D%24%7BDOCKER_GROUP_ID%7D'%0A%20%20%20%20labels%3A%0A%20%20%20%20%20%20-%20'traefik.enable%3Dtrue'%0A%20%20%20%20%20%20-%20'traefik.http.services.netdata.loadbalancer.server.port%3D19999'%0A%20%20%20%20%20%20-%20'traefik.http.routers.netdata.rule%3DHost(%60status.%24%7BDEPOT_DOMAIN_NAME%7D%60)'%0A%20%20%20%20%20%20-%20'traefik.http.routers.netdata.entrypoints%3Dwebsecure'%0A%20%20%20%20%20%20-%20'traefik.http.routers.netdata.tls.certresolver%3Dmydnschallenge'%0A%20%20%20%20networks%3A%0A%20%20%20%20%20%20-%20traefik%0Anetworks%3A%0A%20%20traefik%3A%0A%20%20%20%20external%3A%20true",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Netdata Container\nAfter=docker.service depot-env.service\nRequires=docker.service depot-env.service\n\n[Service]\nRestart=always\nEnvironmentFile=-/etc/sysconfig/mediadepot\nTimeoutStartSec=0\nRestart=always\nWorkingDirectory=/opt/mediadepot/systemd/netdata/\nExecStartPre=-/usr/bin/docker-compose down -v\nExecStartPre=-/usr/bin/docker-compose rm -v\nExecStartPre=-/usr/bin/docker-compose pull\nExecStart=/usr/bin/docker-compose up\nExecStop=/usr/bin/docker-compose down -v\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
+        "enabled": true,
+        "name": "netdata.service"
+      }
+    ]
+  }
+}

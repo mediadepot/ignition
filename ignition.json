@@ -1,0 +1,212 @@
+{
+  "ignition": {
+    "config": {
+      "append": [
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/base.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/mergerfs.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/portainer.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/traefik.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/samba.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/notifications.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/fs-monitor.json",
+          "verification": {}
+        },
+        {
+          "source": "https://mediadepot.github.io/ignition/ignition.d/netdata.json",
+          "verification": {}
+        }
+      ]
+    },
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs="
+        ]
+      },
+      {
+        "name": "depot",
+        "noUserGroup": true,
+        "primaryGroup": "depot",
+        "sshAuthorizedKeys": [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIEA0QIsn450XjpKdoAicWqu6pgoc7h+lUokibTF75NcLVhrhnOn8aVpV+MemlE6kt6wjZDK7WyTEX1+/4dIFwH92+TJwBRKG8Yd0aTFHjWZg7K/dZAak041sF21D9K+7R0PtZK/B6szbdN9bZtwss2ebuzMu9Pxw3Rzq/PsPfl9nzs="
+        ],
+        "shell": "/bin/bash",
+        "uid": 15000
+      }
+    ]
+  },
+  "storage": {
+    "directories": [
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/drive1/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/drive2/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/drive3/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/drive4/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/drive5/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/drive6/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      }
+    ],
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/etc/systemd/system/media-storage.mount.d/deps.conf",
+        "contents": {
+          "source": "data:,%5BUnit%5D%0ARequires%20%3D%20mnt-drive1.mount%0ARequires%20%3D%20mnt-drive2.mount%0ARequires%20%3D%20mnt-drive3.mount%0ARequires%20%3D%20mnt-drive4.mount%0ARequires%20%3D%20mnt-drive5.mount%0ARequires%20%3D%20mnt-drive6.mount%0AAfter%20%3D%20mnt-drive1.mount%0AAfter%20%3D%20mnt-drive2.mount%0AAfter%20%3D%20mnt-drive3.mount%0AAfter%20%3D%20mnt-drive4.mount%0AAfter%20%3D%20mnt-drive5.mount%0AAfter%20%3D%20mnt-drive6.mount%0A",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "filesystem": "root",
+        "path": "/etc/systemd/system/depot-filesystem.service.d/folders.conf",
+        "contents": {
+          "source": "data:,%5BService%5D%0AEnvironment%3D%22MEDIA_FOLDERS%3Ddocuments%20ebooks%20movies%20music%20photos%20software%20tvshows%22%0A",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "filesystem": "root",
+        "path": "/etc/systemd/system/depot-env.service.d/domain.conf",
+        "contents": {
+          "source": "data:,%5BService%5D%0AEnvironment%3D%22DEPOT_DOMAIN_NAME%3Ddepot.lan%22%0A",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/fs-monitor/config/smartd.conf",
+        "contents": {
+          "source": "data:,%23%20Configuration%20file%20for%20smartd.%0A%23%20-a%20%7C%20monitor%20all%20SMART%20properties%0A%23%20-o%20%7C%20%5BATA%20only%5D%20Enables%20SMART%20Automatic%20Offline%20Testing%20when%20smartd%20starts%20up%20and%20has%20no%20further%20effect.%20The%20valid%20arguments%20to%20this%20Directive%20are%20on%20and%20off.%0A%23%20-m%20%7C%20Send%20a%20warning%20email%20to%20the%20email%20address%20ADD%20if%20the%20'-H'%2C%20'-l'%2C%20'-f'%2C%20'-C'%2C%20or%20'-O'%20Directives%20detect%20a%20failure%20or%20a%20new%20error%2C%20or%20if%20a%20SMART%20command%20to%20the%20disk%20fails.%0A%23%20-M%20%7C%20modify%20the%20behavior%20of%20the%20smartd%20email%20warnings%20enabled%20with%20the%20'-m'%20email%20Directive.%20un%20the%20executable%20PATH%20instead%20of%20the%20default%20mail%20command%2C%20when%20smartd%20needs%20to%20send%20email.%20PATH%20must%20point%20to%20an%20executable%20binary%20file%20or%20script.%0A%23%20-s%20%7C%20Run%20Self-Tests%20or%20Offline%20Immediate%20Tests%2C%20at%20scheduled%20times.%20A%20Self-%20or%20Offline%20Immediate%20Test%20will%20be%20run%20at%20the%20end%20of%20periodic%20device%20polling%2C%20if%20all%2012%20characters%20of%20the%20string%20T%2FMM%2FDD%2Fd%2FHH%20match%20the%20extended%20regular%20expression%0A%23%0A%23%20S%2F..%2F..%2F.%2F02%20%7C%20schedule%20a%20short%20Self-Test%20between%202-3%20am%20every%20morning%0A%23%20L%2F..%2F..%2F6%2F03%20%7C%20schedule%20a%20long%20Self-Test%20between%203-4%20am%20every%20Saturday%20morning%0A%0A%23%20unfortunatley%20you%20cant%20use%20%2Fdev%2Fdisk%2Fby-uuid%2F988cc439-03f4-4c86-8383-10280783345d%20when%20mounting%20devices%20into%20a%20container%2C%20so%20we're%20stuck%20with%20%2Fdev%2Fsda%2C%20sdb%2C%20etc.%0A%2Fdev%2Fsda%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A%2Fdev%2Fsdb%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A%2Fdev%2Fsdc%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A%2Fdev%2Fsdd%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A%2Fdev%2Fsde%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A%2Fdev%2Fsdf%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A%2Fdev%2Fsdg%20-a%20-o%20on%20-S%20on%20-s%20(S%2F..%2F..%2F.%2F02%7CL%2F..%2F..%2F6%2F03)%20-m%20%40ALL%20-M%20exec%20%2Fetc%2Fsmartd_warning.sh%0A",
+          "verification": {}
+        },
+        "mode": 420
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Mount]\nWhat=/dev/disk/by-uuid/806cf4bc-d160-4d96-8ee9-3ab7cf2a2e1f\nWhere=/mnt/drive1\nType=ext4\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "mnt-drive1.mount"
+      },
+      {
+        "contents": "[Mount]\nWhat=/dev/disk/by-uuid/3a475599-9521-4a14-8e29-5b18a215193f\nWhere=/mnt/drive2\nType=ext4\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "mnt-drive2.mount"
+      },
+      {
+        "contents": "[Mount]\nWhat=/dev/disk/by-uuid/6dfb654e-9d71-4398-b326-49ce78f6a302\nWhere=/mnt/drive3\nType=ext4\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "mnt-drive3.mount"
+      },
+      {
+        "contents": "[Mount]\nWhat=/dev/disk/by-uuid/fc684dcc-aa2f-44f3-a958-d302dc7dd46d\nWhere=/mnt/drive4\nType=ext4\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "mnt-drive4.mount"
+      },
+      {
+        "contents": "[Mount]\nWhat=/dev/disk/by-uuid/8125ec6d-a7e4-4950-ac84-72d6a4d67128\nWhere=/mnt/drive5\nType=ext4\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "mnt-drive5.mount"
+      },
+      {
+        "contents": "[Mount]\nWhat=/dev/disk/by-uuid/96809924-7aae-4725-91fa-d32273453d37\nWhere=/mnt/drive6\nType=ext4\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "mnt-drive6.mount"
+      }
+    ]
+  }
+}

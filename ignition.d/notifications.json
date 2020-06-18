@@ -1,0 +1,22 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {},
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=System Startup/Shutdown Notification\nRequires=systemd-networkd.service\nAfter=systemd-networkd.service\n\n[Service]\nExecStart=curl -d \"token=aNiH7or6Q5F1ennDtQpSvhbtY4ot6C\u0026user=xxx\u0026title=Depot+-+Server+Startup\u0026message=server+startup\u0026priority=1\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST https://api.pushover.net/1/messages.json\nExecStop=curl -d \"token=aNiH7or6Q5F1ennDtQpSvhbtY4ot6C\u0026user=xxx\u0026title=Depot+-+Server+Shutdown\u0026message=server+shutdown\u0026priority=1\" -H \"Content-Type: application/x-www-form-urlencoded\" -X POST https://api.pushover.net/1/messages.json\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target",
+        "enable": true,
+        "name": "system-notify.service"
+      }
+    ]
+  }
+}

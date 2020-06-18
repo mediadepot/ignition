@@ -1,0 +1,41 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "directories": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/portainer/",
+        "mode": 493
+      }
+    ],
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/systemd/portainer/docker-compose.yml",
+        "contents": {
+          "source": "data:,version%3A%20'2'%0Aservices%3A%0A%20%20portainer%3A%0A%20%20%20%20image%3A%20portainer%2Fportainer%0A%20%20%20%20volumes%3A%0A%20%20%20%20%20%20-%20'%2Fopt%2Fmediadepot%2Fportainer%3A%2Fdata'%0A%20%20%20%20%20%20-%20'%2Fvar%2Frun%2Fdocker.sock%3A%2Fvar%2Frun%2Fdocker.sock'%0A%20%20%20%20ports%3A%0A%20%20%20%20%20%20-%209000%3A9000%0A%20%20%20%20labels%3A%0A%20%20%20%20%20%20-%20'traefik.enable%3Dtrue'%0A%20%20%20%20%20%20-%20'traefik.http.services.portainer.loadbalancer.server.port%3D9000'%0A%20%20%20%20%20%20-%20'traefik.http.routers.portainer.rule%3DHost(%60admin.%24%7BDEPOT_DOMAIN_NAME%7D%60)'%0A%20%20%20%20%20%20-%20'traefik.http.routers.portainer.entrypoints%3Dwebsecure'%0A%20%20%20%20%20%20-%20'traefik.http.routers.portainer.tls.certresolver%3Dmydnschallenge'%0A%20%20%20%20command%3A%0A%20%20%20%20%20%20-%20--no-analytics%0A%20%20%20%20%20%20-%20--templates%3Dhttps%3A%2F%2Fmediadepot.github.io%2Ftemplates%2Fportainer.json%0A%20%20%20%20%20%20-%20--host%3Dunix%3A%2F%2F%2Fvar%2Frun%2Fdocker.sock%0A%20%20%20%20networks%3A%0A%20%20%20%20%20%20-%20traefik%0Anetworks%3A%0A%20%20traefik%3A%0A%20%20%20%20external%3A%20true",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Portainer Admin Container\nAfter=docker.service depot-env.service\nRequires=docker.service depot-env.service\n\n[Service]\nRestart=always\nEnvironmentFile=-/etc/sysconfig/mediadepot\nTimeoutStartSec=0\nRestart=always\nWorkingDirectory=/opt/mediadepot/systemd/portainer/\nExecStartPre=-/usr/bin/docker-compose down -v\nExecStartPre=-/usr/bin/docker-compose rm -v\nExecStartPre=-/usr/bin/docker-compose pull\nExecStart=/usr/bin/docker-compose up\nExecStop=/usr/bin/docker-compose down -v\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
+        "enabled": true,
+        "name": "portainer.service"
+      }
+    ]
+  }
+}

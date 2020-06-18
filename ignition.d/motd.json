@@ -1,0 +1,46 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "directories": [
+      {
+        "filesystem": "root",
+        "path": "/etc/update-motd.d",
+        "mode": 493
+      }
+    ],
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/bootstrap/update-motd.sh",
+        "contents": {
+          "source": "data:,%23!%2Fbin%2Fbash%20-e%0A%0A%23%20We%20want%20to%20grab%20the%20GROUP%20variable%0A%5B%20-e%20%2Fusr%2Fshare%2Fcoreos%2Fupdate.conf%20%5D%20%26%26%20source%20%2Fusr%2Fshare%2Fcoreos%2Fupdate.conf%0A%5B%20-e%20%2Fetc%2Fcoreos%2Fupdate.conf%20%5D%20%26%26%20source%20%2Fetc%2Fcoreos%2Fupdate.conf%0A%0Asource%20%2Fusr%2Flib%2Fos-release%0A%0Amkdir%20-p%20%2Frun%2Fcoreos%0A%0A%23%23%20Reset%20the%20CoreOS%20MOTD.%0Aecho%20-e%20%22%5Ce%5B%24%7BANSI_COLOR%7Dm%24%7BNAME%7D%5Ce%5B39m%20%24%7BGROUP%7D%20(%24%7BVERSION%7D)%22%20%3E%20%2Frun%2Fcoreos%2Fmotd%0A%0Aif%20%5B%5B%20-d%20%22%2Fetc%2Fupdate-motd.d%22%20%5D%5D%3B%20then%0A%20%20%20%20cd%20%2Fetc%2Fupdate-motd.d%2F%0A%20%20%20%20for%20f%20in%20*.sh%3B%20do%0A%20%20%20%20%20%20test%20-f%20%22%24f%22%20%7C%7C%20continue%0A%20%20%20%20%20%20bash%20%22%24f%22%20-H%20%3E%3E%20%2Frun%2Fcoreos%2Fmotd%0A%20%20%20%20done%0Afi",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Updates /run/coreos/motd with dynamic content from scripts in /etc/update-motd.d\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/bootstrap/update-motd.sh\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "motd.service"
+      },
+      {
+        "contents": "[Unit]\nDescription=Run motd.service every 10 minutes\n\n[Timer]\nOnCalendar=*:0/10\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "motd.timer"
+      }
+    ]
+  }
+}

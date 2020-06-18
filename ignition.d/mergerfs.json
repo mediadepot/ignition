@@ -1,0 +1,78 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "directories": [
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/sbin.wd/",
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/media/storage/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      }
+    ],
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/sbin/mergerfs",
+        "contents": {
+          "source": "https://mediadepot.github.io/ignition/opt/sbin/mergerfs-2.25.1",
+          "verification": {}
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/bootstrap/filesystem.sh",
+        "contents": {
+          "source": "data:,%23!%2Fusr%2Fbin%2Fenv%20bash%0A%0A%23%20%2Fmedia%2Fstorage%20is%20the%20mount%20point%20for%20persistent%20storage%20on%20virtual%2FJBOD%20disk%0A%23%20%2Fmedia%2Ftemp%20is%20temp%20storage%20for%20downloading%0A%0A%23the%20following%20paths%20are%20for%20tmp%20storage%20of%20files%20that%20are%20being%20downloaded%20(processing)%20and%20torrent%20files%20(blackhole).%0Amkdir%20-p%20%2Fmedia%2Ftemp%2Fprocessing%0Amkdir%20-p%20%2Fmedia%2Ftemp%2Fblackhole%0A%0A%23The%20seed%20root%2C%20where%20completed%20files%20are%20copied%20to%2C%20and%20can%20be%20deleted%20from%20after%20seeding%20is%20compeleted.%20(files%20are%20copied%20to%20the%20other%20shares%20by%20apps.)%0Amkdir%20-p%20%2Fmedia%2Fstorage%2Fdownloads%0A%0Afor%20fld%20in%20%24%7BMEDIA_FOLDERS%7D%0Ado%0A%20%20%20%20mkdir%20-p%20%2Fmedia%2Ftemp%2Fblackhole%2F%24fld%0A%20%20%20%20mkdir%20-p%20%2Fmedia%2Fstorage%2Fdownloads%2F%24fld%0A%20%20%20%20mkdir%20-p%20%2Fmedia%2Fstorage%2F%24fld%0Adone%0A%0Acat%20%3E%2Fmedia%2Ftemp%2FREADME.md%20%3C%3CEOL%0A%23%20Temp%20Directory%0A%0A-%20**Who**%3A%20The%20%60temp%60%20directory%20is%20created%20and%20%20managed%20by%20MediaDepot.%0A-%20**What**%3A%20It%20stores%20the%20following%20types%20of%20data%3A%0A%09-%20files%20that%20are%20currently%20being%20downloaded%20via%20a%20torrent%20client%20(%60deluge%60%2C%20%60hadouken%60%2C%20%60rutorrent%60%2C%20etc)%20which%20are%20stored%20in%20the%20%60processing%60%20folder%0A%09-%20torrent%20files%20(stored%20in%20the%20%60blackhole%60%20folder)%20which%20will%20be%20automatically%20added%20to%20your%20torrent%20client.%0A-%20**When**%3A%0A%09-%20Files%20in%20the%20%60blackhole%60%20sub-directories%20are%20created%20by%20third%20party%20applications%20like%20Couchpotato%2C%20Sickrage%2C%20etc.%0A%09-%20Files%20in%20the%20%60processing%60%20directory%20are%20created%20directly%20by%20a%20torrent%20client%0A-%20**Where**%3A%20The%20%60temp%60%20directory%20is%20physically%20located%20on%20your%20OS%20Drive.%0A-%20**Why**%3A%20Partially%20downloaded%20files%20are%20constantly%20being%20written%20to%20by%20the%20torrent%20clients.%0A-%20**How**%3A%0A%0AEOL%0A%0Acat%20%3E%2Fmedia%2Fstorage%2FREADME.md%20%3C%3CEOL%0A%23%20Storage%20Drive%0A%0A-%20**Who**%3A%20The%20%60storage%60%20drive%20is%20created%20by%20MergerFS%20and%20managed%20by%20MediaDepot.%0A-%20**What**%3A%20It%20stores%20the%20following%20types%20of%20data%3A%0A%09-%20completed%20files%20downloaded%20via%20a%20torrent%20client%20(%60deluge%60%2C%20%60hadouken%60%2C%20%60rutorrent%60%2C%20etc)%20are%20automatically%20stored%20in%20their%20associated%20%60downloads%60%20subfolder%0A%09-%20processed%20files%20(which%20have%20been%20moved%20and%2For%20renamed%20by%20a%20third%20party%20application%20like%20Couchpotato%2C%20Sickbeard)%20are%20stored%20in%20their%20associated%20folder.%0A-%20**When**%3A%0A%20%09-%20files%20in%20the%20%60downloads%60%20subdirectories%20are%20created%20by%20a%20torrent%20client.%0A%20%09-%20files%20in%20the%20%60tvshows%60%2C%20%60movies%60%2C%20and%20other%20directories%20are%20files%20that%20have%20been%20movied%20by%20third%20party%20applications%20to%20thier%20associated%20folder.%0A-%20**Where**%3A%20The%20%60storage%60%20drive%20is%20actually%20made%20up%20of%20multiple%20harddrives%20all%20joined%20together.%0A-%20**Why**%3A%20By%20joining%20all%20the%20harddrives%20together%20using%20MergerFS%2C%20we%20are%20able%20to%20store%20an%20constantly%20expanding%20amount%20of%20data%20in%20a%20single%20folder-structure%2C%20without%20needing%20to%20worry%20about%20individual%20drive%20capacity%0A-%20**How**%3A%20The%20%60storage%60%20drive%20is%20created%20by%20MergerFS%2C%20you%20can%20read%20more%20on%20its%20github%20page.%0A%0AEOL%0A%0A%0A%23%20chown%20all%20directories%20to%20make%20sure%20permissions%20are%20set%20correctly.%0Achown%20-R%20depot%3Adepot%20%2Fmedia%2Ftemp%0Achown%20-R%20depot%3Adepot%20%2Fmedia%2Fstorage",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ],
+    "links": [
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/sbin/mount.mergerfs",
+        "target": "/opt/overlay/sbin/mergerfs"
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Overlay mount /usr/sbin mount\nBefore=local-fs.target\nConditionPathExists=/opt/overlay/sbin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/sbin\nOptions=lowerdir=/usr/sbin,upperdir=/opt/overlay/sbin,workdir=/opt/overlay/sbin.wd\n\n[Install]\nWantedBy=local-fs.target",
+        "enabled": true,
+        "name": "usr-sbin.mount"
+      },
+      {
+        "contents": "[Unit]\nDescription = Mount mergerfs volume\nRequires = usr-sbin.mount\nAfter = usr-sbin.mount\n\n[Mount]\nWhat = /mnt/drive*\nWhere = /media/storage\nType = mergerfs\nOptions = direct_io,defaults,allow_other,minfreespace=50G,use_ino,fsname=mergerfs\n[Install]\nWantedBy = multi-user.target",
+        "enabled": true,
+        "name": "media-storage.mount"
+      },
+      {
+        "contents": "[Unit]\nDescription=Depot Folder Structure\nAfter=media-storage.mount\nRequires=media-storage.mount\nConditionPathIsMountPoint=/media/storage\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/bootstrap/filesystem.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "depot-filesystem.service"
+      }
+    ]
+  }
+}

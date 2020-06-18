@@ -1,0 +1,145 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {
+    "groups": [
+      {
+        "gid": 15000,
+        "name": "depot"
+      }
+    ]
+  },
+  "storage": {
+    "directories": [
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/mnt/temp/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/media/temp/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/opt/mediadepot/apps/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/opt/mediadepot/systemd/",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/bootstrap/",
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/",
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/bin",
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/bin.wd",
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/etc/sysconfig/",
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/etc/systemd/system/docker.service.d/",
+        "mode": 493
+      }
+    ],
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/bootstrap/depot-env.sh",
+        "contents": {
+          "source": "data:,%23!%2Fbin%2Fbash%0AIP_ADDRESS%3D%24(ip%20route%20get%201%20%7C%20sed%20-n%20's%2F%5E.*src%20%5C(%5B0-9.%5D*%5C)%20.*%24%2F%5C1%2Fp')%0A%0Acat%20%3E%2Fetc%2Fsysconfig%2Fmediadepot%20%3C%3CEOL%0A%23%20Used%20by%20dnsmasq%0ADEPOT_SERVER_IP%3D%24%7BIP_ADDRESS%7D%0A%0A%23%20Used%20by%20netdata%0ADOCKER_GROUP_ID%3D%24(id%20-g%20docker)%0A%0A%23%20Depot%20domain%20namee%0ADEPOT_DOMAIN_NAME%3D%24%7BDEPOT_DOMAIN_NAME%7D%0AEOL%0A%0A%0A%23TODO%3A%20check%20if%20file%20exists%20first%20before%20restarting%20service.%0Acat%20%3E%2Fetc%2Fsystemd%2Fsystem%2Fdocker.service.d%2Fdocker-opts.conf%20%3C%3CEOL%0A%5BService%5D%0AEnvironment%3D%22DOCKER_OPTS%3D--dns%3D%24%7BIP_ADDRESS%7D%22%0AEOL%0A%0A%23%20create%20a%20traefik%20network%20if%20it%20does%20not%20already%20exist%0Adocker%20network%20create%20traefik%20%7C%7C%20echo%20%22network%20already%20exists%2C%20ignoring%22%0A%0A%23%20restart%20Docker%20Daemon%20after%20changing%20opts.%0Asystemctl%20daemon-reload%0Asystemctl%20restart%20docker.service%0A%0A",
+          "verification": {}
+        },
+        "mode": 493
+      },
+      {
+        "filesystem": "root",
+        "path": "/etc/systemd/system/media-storage.mount.d/base.conf",
+        "contents": {
+          "source": "data:,%5BUnit%5D%0ARequires%20%3D%20media-temp.mount%0AAfter%20%3D%20media-temp.mount%0A",
+          "verification": {}
+        },
+        "mode": 420
+      },
+      {
+        "filesystem": "root",
+        "path": "/opt/overlay/bin/docker-compose",
+        "contents": {
+          "source": "https://mediadepot.github.io/ignition/opt/bin/docker-compose-1.23.2",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Mount]\nWhat=/mnt/temp\nWhere=/media/temp\nType=none\nOptions=bind\n\n[Install]\nWantedBy=local-fs.target",
+        "enable": true,
+        "name": "media-temp.mount"
+      },
+      {
+        "contents": "[Unit]\nDescription=Generate Depot Environmental Files\nAfter=network-online.target\nRequires=network-online.target\n\n[Service]\nType=oneshot\nExecStart=/opt/mediadepot/bootstrap/depot-env.sh\nRemainAfterExit=true\nStandardOutput=journal\n\n[Install]\nWantedBy=multi-user.target",
+        "enabled": true,
+        "name": "depot-env.service"
+      },
+      {
+        "contents": "[Unit]\nDescription=Overlay mount /usr/bin mount\nBefore=local-fs.target\nConditionPathExists=/opt/overlay/bin\n\n[Mount]\nType=overlay\nWhat=overlay\nWhere=/usr/bin\nOptions=lowerdir=/usr/bin,upperdir=/opt/overlay/bin,workdir=/opt/overlay/bin.wd\n\n[Install]\nWantedBy=local-fs.target",
+        "enabled": true,
+        "name": "usr-bin.mount"
+      }
+    ]
+  }
+}

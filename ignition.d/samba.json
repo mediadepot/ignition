@@ -1,0 +1,47 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "directories": [
+      {
+        "filesystem": "root",
+        "group": {
+          "id": 15000
+        },
+        "path": "/opt/mediadepot/apps/samba",
+        "user": {
+          "id": 15000
+        },
+        "mode": 493
+      }
+    ],
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/systemd/samba/docker-compose.yml",
+        "contents": {
+          "source": "data:,version%3A%20'2'%0Aservices%3A%0A%20%20samba%3A%0A%20%20%20%20image%3A%20mediadepot%2Fsamba%0A%20%20%20%20volumes%3A%0A%20%20%20%20%20%20-%20'%2Fopt%2Fmediadepot%2Fapps%2Fsamba%3A%2Fconfig'%0A%20%20%20%20%20%20-%20'%2Fmedia%3A%2Fmedia'%0A%20%20%20%20environment%3A%0A%20%20%20%20%20%20-%20'SAMBA_USERNAME%3Ddepot'%0A%20%20%20%20%20%20-%20'SAMBA_PASSWORD%3Dbadpass'%0A%20%20%20%20%20%20-%20'TZ%3DAmerica%2FLos_Angeles'%0A%20%20%20%20ports%3A%0A%20%20%20%20%20%20-%20139%3A139%0A%20%20%20%20%20%20-%20445%3A445",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Samba Container\nAfter=docker.service depot-env.service\nRequires=docker.service depot-env.service\n\n[Service]\nRestart=always\nEnvironmentFile=-/etc/sysconfig/mediadepot\nTimeoutStartSec=0\nRestart=always\nWorkingDirectory=/opt/mediadepot/systemd/samba/\nExecStartPre=-/usr/bin/docker-compose down -v\nExecStartPre=-/usr/bin/docker-compose rm -v\nExecStartPre=-/usr/bin/docker-compose pull\nExecStart=/usr/bin/docker-compose up\nExecStop=/usr/bin/docker-compose down -v\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
+        "enabled": true,
+        "name": "samba.service"
+      }
+    ]
+  }
+}

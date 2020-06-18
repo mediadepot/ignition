@@ -1,0 +1,34 @@
+{
+  "ignition": {
+    "config": {},
+    "security": {
+      "tls": {}
+    },
+    "timeouts": {},
+    "version": "2.2.0"
+  },
+  "networkd": {},
+  "passwd": {},
+  "storage": {
+    "files": [
+      {
+        "filesystem": "root",
+        "path": "/opt/mediadepot/systemd/traefik/docker-compose.yml",
+        "contents": {
+          "source": "data:,version%3A%20'2'%0Aservices%3A%0A%20%20traefik%3A%0A%20%20%20%20image%3A%20traefik%3Av2.0%0A%20%20%20%20ports%3A%0A%20%20%20%20%20%20%23%20The%20HTTP%20port%0A%20%20%20%20%20%20-%20%2280%3A80%22%0A%20%20%20%20%20%20%23%20The%20HTTPS%20port%0A%20%20%20%20%20%20-%20%22443%3A443%22%0A%20%20%20%20%20%20%23%20The%20Web%20UI%20(enabled%20by%20--api.insecure%3Dtrue)%0A%20%20%20%20%20%20-%20%228080%3A8080%22%0A%20%20%20%20volumes%3A%0A%20%20%20%20%20%20-%20%22%2Fvar%2Frun%2Fdocker.sock%3A%2Fvar%2Frun%2Fdocker.sock%3Aro%22%0A%20%20%20%20%20%20-%20%22%2Fopt%2Fmediadepot%2Ftraefik%2Fletsencrypt%3A%2Fletsencrypt%22%0A%20%20%20%20command%3A%0A%20%20%20%20%20%20-%20--api.insecure%3Dtrue%0A%20%20%20%20%20%20-%20--providers.docker%0A%20%20%20%20%20%20-%20--providers.docker.exposedByDefault%3Dfalse%0A%20%20%20%20%20%20-%20--providers.docker.network%3Dtraefik%0A%20%20%20%20%20%20-%20--entrypoints.web.address%3D%3A80%0A%20%20%20%20%20%20-%20--entrypoints.websecure.address%3D%3A443%0A%20%20%20%20%20%20-%20'--providers.docker.defaultRule%3DHost(%60%7B%7B%20normalize%20.Name%20%7D%7D.%24%7BDEPOT_DOMAIN_NAME%7D%60)'%0A%20%20%20%20%20%20-%20%22--certificatesresolvers.mydnschallenge.acme.dnschallenge%3Dtrue%22%0A%20%20%20%20%20%20-%20%22--certificatesresolvers.mydnschallenge.acme.dnschallenge.provider%3Dcloudflare%22%0A%20%20%20%20%20%20-%20%22--certificatesresolvers.mydnschallenge.acme.email%3Dpostmaster%40%24%7BDEPOT_DOMAIN_NAME%7D%22%0A%20%20%20%20%20%20-%20%22--certificatesresolvers.mydnschallenge.acme.storage%3D%2Fletsencrypt%2Facme.json%22%0A%20%20%20%20%20%20-%20%22--serverstransport.forwardingtimeouts.idleconntimeout%3D10%22%0A%20%20%20%20labels%3A%0A%20%20%20%20%20%20%23%20Force%20http%20to%20https%20redirects.%0A%20%20%20%20%20%20-%20traefik.enable%3Dtrue%0A%20%20%20%20%20%20-%20traefik.http.routers.https-redirect.entrypoints%3Dweb%0A%20%20%20%20%20%20-%20traefik.http.routers.https-redirect.rule%3DHostRegexp(%60%7Bany%3A.*%7D%60)%0A%20%20%20%20%20%20-%20traefik.http.routers.https-redirect.middlewares%3Dhttps-only%0A%20%20%20%20%20%20-%20traefik.http.middlewares.https-only.redirectscheme.scheme%3Dhttps%0A%0A%20%20%20%20%20%20-%20'traefik.http.routers.traefik.rule%3DHost(%60traefik.%24%7BDEPOT_DOMAIN_NAME%7D%60)'%0A%20%20%20%20%20%20-%20traefik.http.routers.traefik.entrypoints%3Dwebsecure%0A%20%20%20%20%20%20-%20'traefik.http.routers.traefik.service%3Dapi%40internal'%0A%20%20%20%20%20%20-%20traefik.http.routers.traefik.tls.certresolver%3Dmydnschallenge%0A%20%20%20%20%23%20NOTE%3A%20for%20authentication%20you%20should%20create%20a%20new%20docker-compose.overrides.yml%20file%20and%20specify%20your%20environmental%0A%20%20%20%20%23%20variables.%0A%20%20%20%20%23%20environment%3A%0A%20%20%20%20%23%20%20%20-%20%22CF_DNS_API_TOKEN%3Dmytoken%20here%22%0A%20%20%20%20networks%3A%0A%20%20%20%20%20%20-%20traefik%0Anetworks%3A%0A%20%20traefik%3A%0A%20%20%20%20external%3A%20true",
+          "verification": {}
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Traefik Router Container\nAfter=docker.service depot-env.service\nRequires=docker.service depot-env.service\n\n[Service]\nRestart=always\nEnvironmentFile=-/etc/sysconfig/mediadepot\nTimeoutStartSec=0\nRestart=always\nWorkingDirectory=/opt/mediadepot/systemd/traefik/\nExecStartPre=-/usr/bin/docker-compose down -v\nExecStartPre=-/usr/bin/docker-compose rm -v\nExecStartPre=-/usr/bin/docker-compose pull\nExecStart=/usr/bin/docker-compose up\nExecStop=/usr/bin/docker-compose down -v\n\n[Install]\nWantedBy=multi-user.target\nWantedBy=docker.service",
+        "enabled": true,
+        "name": "traefik.service"
+      }
+    ]
+  }
+}
