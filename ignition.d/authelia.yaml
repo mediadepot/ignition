@@ -16,7 +16,7 @@ storage:
             authelia:
               image: authelia/authelia
               volumes:
-                - '/opt/mediadepot/authelia/configuration.yml:/etc/authelia/configuration.yml:ro'
+                - '/opt/mediadepot/authelia/configuration.yml:/config/configuration.yml:ro'
                 - '/opt/mediadepot/authelia/data:/etc/authelia/data:rw'
               environment:
                 - 'TZ=America/Los_Angeles'

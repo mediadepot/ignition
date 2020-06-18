@@ -12,7 +12,8 @@ systemd:
       contents: |-
         [Unit]
         Description=System Startup/Shutdown Notification
-        After=network.target
+        Requires=systemd-networkd.service
+        After=systemd-networkd.service
 
         [Service]
         ExecStart=curl -d "token=aNiH7or6Q5F1ennDtQpSvhbtY4ot6C&user=xxx&title=Depot+-+Server+Startup&message=server+startup&priority=1" -H "Content-Type: application/x-www-form-urlencoded" -X POST https://api.pushover.net/1/messages.json
