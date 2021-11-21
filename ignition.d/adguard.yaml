@@ -1,0 +1,145 @@
+---
+ignition:
+  config: {}
+  timeouts: {}
+networkd: {}
+passwd: {}
+storage:
+  files:
+    - filesystem: root
+      path: "/opt/mediadepot/systemd/adguard/docker-compose.yml"
+      mode: 493 #755
+      contents:
+        inline: |-
+          version: '2'
+          services:
+            adguard:
+              image: 'adguard/adguardhome:latest'
+              network_mode: host
+              cap_add:
+                - NET_ADMIN
+              volumes:
+                - '/opt/mediadepot/adguard/work:/opt/adguardhome/work'
+                - '/opt/mediadepot/adguard/conf:/opt/adguardhome/conf'
+              dns:
+                - 8.8.8.8
+                - 8.8.4.4
+              command:
+                - --log-queries
+                - --log-facility=-
+                - --bogus-priv
+                - --domain-needed
+                - --local-service
+                - --local=/${DEPOT_DOMAIN_NAME}/
+                - --listen-address=127.0.0.1
+                - --listen-address=${DEPOT_SERVER_IP}
+                - --address
+                - /${DEPOT_DOMAIN_NAME}/${DEPOT_SERVER_IP}
+    - filesystem: root
+        path: "/opt/mediadepot/adguard/conf/AdGuardHome.yaml"
+        mode: 493 #755
+        contents:
+          inline: |-
+            ###############################################################
+            #                   Adguard configuration                    #
+            ###############################################################
+
+            # The host and port to listen on
+            bind_host: 0.0.0.0
+            bind_port: 9091
+
+            users:
+            - name: depot
+              password: '$2y$05$grx.upba6c1LewjWVL/MberWe4DiDWJvINqOw8ltDvQVtzi0wt4Ma'
+
+
+            # DNS configuration section.
+            # see: https://github.com/sontt9/ansible-raspi/blob/669ee15e9cc3760cdecc1860116a8c1c58007f16/templates/adguardhome.yaml.j2
+            dns:
+              bind_hosts:
+              - '0.0.0.0'
+              protection_enabled: true
+              filtering_enabled: true
+              blocking_mode: nxdomain
+              blocked_response_ttl: 120
+              parental_enabled: false
+              safesearch_enabled: false
+              safebrowsing_enabled: false
+
+              bootstrap_dns:
+              - 1.1.1.1:53
+              - 8.8.8.8:53
+              upstream_dns:
+              - https://1.1.1.1/dns-query
+              - https://8.8.8.8/dns-query
+
+            filters:
+            - enabled: true
+              url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
+              name: AdGuard Simplified Domain Names filter
+              id: 1
+            - enabled: true
+              url: https://raw.githubusercontent.com/bigdargon/hostsVN/master/filters/adservers-all.txt
+              name: hostsVN
+              id: 1571893203
+            - enabled: true
+              url: https://github.com/alexsannikov/adguardhome-filters/raw/master/admalware.txt
+              name: adguardhome-filters-admalware
+              id: 1571893206
+            - enabled: true
+              url: https://github.com/alexsannikov/adguardhome-filters/raw/master/fakenews.txt
+              name: adguardhome-filters-fakenews
+              id: 1571893207
+            - enabled: true
+              url: https://github.com/alexsannikov/adguardhome-filters/raw/master/gambling.txt
+              name: adguardhome-filters-gamling
+              id: 1571893208
+            - enabled: true
+              url: https://github.com/alexsannikov/adguardhome-filters/raw/master/rueasylist.txt
+              name: adguardhome-filters-rueasylist
+              id: 1571893209
+            - enabled: true
+              url: https://github.com/alexsannikov/adguardhome-filters/raw/master/social.txt
+              name: adguardhome-filters-social
+              id: 1571893210
+            - enabled: true
+              url: https://github.com/alexsannikov/adguardhome-filters/raw/master/porn.txt
+              name: adguardhome-filter-porn
+              id: 1571893211
+            - enabled: true
+              url: https://github.com/ammnt/Ammonite/raw/master/approved.txt
+              name: Ammonite
+              id: 1571893212
+
+    directories:
+      - filesystem: root
+        mode: 493 #755
+        path: "/opt/mediadepot/adguard/conf"
+      - filesystem: root
+        mode: 493 #755
+        path: "/opt/mediadepot/adguard/work"
+systemd:
+  units:
+    - name: adguard.service
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Adguard Container
+        After=docker.service depot-env.service
+        Requires=docker.service depot-env.service
+
+        [Service]
+        Restart=always
+        EnvironmentFile=-/etc/sysconfig/mediadepot
+        TimeoutStartSec=0
+        Restart=always
+        WorkingDirectory=/opt/mediadepot/systemd/adguard/
+        ExecStartPre=-/usr/bin/docker-compose down -v
+        ExecStartPre=-/usr/bin/docker-compose rm -v
+        ExecStartPre=-/usr/bin/docker-compose pull
+        ExecStart=/usr/bin/docker-compose up
+        ExecStop=/usr/bin/docker-compose down -v
+
+        [Install]
+        WantedBy=multi-user.target
+        WantedBy=docker.service

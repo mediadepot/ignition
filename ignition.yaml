@@ -28,11 +28,9 @@ ignition:
     # eg. sickrage.depot.lan or home.depot.lan
     - source: https://mediadepot.github.io/ignition/ignition.d/traefik.json
 
-    # (Optional) The dnsmasq.json config installs a Dnsmasq service, which manages a Docker container.
-    # DNSMasq is a light-weight DNS server configured to route all *.depot.lan requests to the traefik container.
-    # All other requests are routed via Google DNS. This means you can configure your other computers to use
-    # DNSMasq as your primary DNS and access the internet and the services running on your Mediadepot server, without any issues.
-    - source: https://mediadepot.github.io/ignition/ignition.d/dnsmasq.json
+    # (Optional) The adguard.json config installs a dns service
+    # A free and open source, powerful network-wide ads & trackers blocking DNS server.
+    - source: https://mediadepot.github.io/ignition/ignition.d/adguard.json
 
     # (Optional) The samba.json config installs a Samba service, which manages a Docker container.
     # Samba exposes the storage folder structure as network shares
