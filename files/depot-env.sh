@@ -19,6 +19,9 @@ cat >/etc/systemd/system/docker.service.d/docker-opts.conf <<EOL
 Environment="DOCKER_OPTS=--dns=${IP_ADDRESS}"
 EOL
 
+mkdir -p /etc/systemd/system/depot-filesystem.service.wants
+ln -s /run/systemd/system/docker.service /etc/systemd/system/depot-filesystem.service.wants/docker.service
+
 # create a traefik network if it does not already exist
 docker network create traefik || echo "network already exists, ignoring"
 
