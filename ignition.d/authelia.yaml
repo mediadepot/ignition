@@ -14,7 +14,7 @@ storage:
           version: '2'
           services:
             authelia:
-              image: authelia/authelia
+              image: authelia/authelia:4.37.2
               volumes:
                 - '/opt/mediadepot/authelia/configuration.yml:/config/configuration.yml:ro'
                 - '/opt/mediadepot/authelia/data:/etc/authelia/data:rw'
