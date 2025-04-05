@@ -116,6 +116,13 @@ storage:
       id: 15000
     group:
       id: 15000
+  - filesystem: root
+    mode: 493 #755
+    path: "/mnt/drive7/"
+    user:
+      id: 15000
+    group:
+      id: 15000
   files:
   # (Required) The media-storage mount service is required. It ensures that the disks are correctly mounted before mergerfs starts and mounts its JBOD drive.
   # The `mnt-*` entries must match the storage directories created above.
@@ -131,12 +138,14 @@ storage:
         Requires = mnt-drive4.mount
         Requires = mnt-drive5.mount
         Requires = mnt-drive6.mount
+        Requires = mnt-drive7.mount
         After = mnt-drive1.mount
         After = mnt-drive2.mount
         After = mnt-drive3.mount
         After = mnt-drive4.mount
         After = mnt-drive5.mount
         After = mnt-drive6.mount
+        After = mnt-drive7.mount
   - filesystem: root
     path: "/etc/systemd/system/depot-filesystem.service.d/folders.conf"
     mode: 420 #644
@@ -234,8 +243,18 @@ systemd:
     enable: true
     contents: |-
       [Mount]
-      What=/dev/disk/by-uuid/96809924-7aae-4725-91fa-d32273453d37
+      What=/dev/disk/by-uuid/ffa5a64e-a5ed-4df9-9695-8804dd7adb51
       Where=/mnt/drive6
+      Type=ext4
+
+      [Install]
+      WantedBy=local-fs.target
+  - name: mnt-drive7.mount
+    enable: true
+    contents: |-
+      [Mount]
+      What=/dev/disk/by-uuid/aede9b43-4384-4688-82f3-fd04776ca316
+      Where=/mnt/drive7
       Type=ext4
 
       [Install]
